@@ -1,0 +1,20 @@
+Package: SigBridgeRUtils
+Title: Some Utilities & Base Supports for SigBridgeR
+Version: 0.0.0.9000
+Authors@R: 
+    person("Yuxi", "Yang", email = "15364051195@163.com", role = c("cre", "aut"),  comment = c(ORCID = "0009-0006-1329-1224"))
+Description: What the package does (one paragraph).
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Suggests: 
+    furrr,
+    future,
+    Matrix,
+    matrixStats,
+    preprocessCore
+Imports: 
+    cli,
+    purrr,
+    rlang
