@@ -16,5 +16,6 @@ Suggests:
     preprocessCore
 Imports: 
     cli,
+    data.table,
     purrr,
     rlang

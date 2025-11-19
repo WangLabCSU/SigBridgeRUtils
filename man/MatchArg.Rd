@@ -54,4 +54,3 @@ MatchArg("gr", c("red", "green", "blue"))             # Returns "green"
 \code{\link[base]{pmatch}} for partial matching \\
 \code{\link[rlang]{caller_env}} for calling environment context
 }
-\keyword{internal}
