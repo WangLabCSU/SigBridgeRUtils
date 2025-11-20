@@ -43,8 +43,9 @@
 #' @export
 #'
 AddMisc <- function(seurat_obj, ..., cover = TRUE) {
-    chk::chk_is(seurat_obj, "Seurat")
-    chk::chk_flag(cover)
+    if (!inherits(seurat_obj, "Seurat")) {
+        cli::cli_abort("seurat_obj must be a Seurat object")
+    }
     # Get the key-value pairs from ... arguments
     dots <- list(...)
     if (length(dots) == 0L) {

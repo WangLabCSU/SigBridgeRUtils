@@ -4,16 +4,17 @@
 \alias{SigBridgeR_Function_Setting}
 \alias{setFuncOption}
 \alias{getFuncOption}
+\alias{showFuncOption}
 \title{Configuration Functions for SigBridgeR Package}
 \usage{
 setFuncOption(...)
 
 getFuncOption(option, default = NULL)
+
+showFuncOption(...)
 }
 \arguments{
-\item{...}{Named arguments representing option-value pairs. Options can be
-provided with or without the "SigBridgeR." prefix. If the prefix is missing,
-it will be automatically added.}
+\item{...}{Additional arguments (currently not used)}
 
 \item{option}{Character string specifying the option name to retrieve.
 The "SigBridgeR." prefix is optional and will be added if missing.}
@@ -27,6 +28,8 @@ of setting package options.
 
 The value of the specified option if it exists, otherwise the
 provided default value.
+
+No return value, prints options to console
 }
 \description{
 These functions provide a centralized configuration system for the SigBridgeR
@@ -40,6 +43,9 @@ ensuring proper namespace isolation.
 getFuncOption retrieves configuration options for the SigBridgeR package.
 The function automatically handles the "SigBridgeR." prefix, allowing users
 to reference options with or without the explicit prefix.
+
+Shows all currently set SigBridgeR package options in a formatted display.
+This function helps users inspect the current configuration settings.
 }
 \section{Available Opions}{
 
@@ -59,5 +65,13 @@ setFuncOption(verbose = TRUE)
 
 # Retrieve options with automatic prefixing
 getFuncOption("verbose")
+
+\dontrun{
+# Set some options first
+setFunOption(verbose = TRUE, workers = 4)
+
+# Display all current SigBridgeR options
+showFuncOption()
+}
 
 }
