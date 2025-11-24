@@ -4,7 +4,7 @@
 \alias{MatchArg}
 \title{Argument Matching with Default Fallback}
 \usage{
-MatchArg(arg, choices, default = choices[1])
+MatchArg(arg, choices, default = choices[1], call = rlang::caller_env(), ...)
 }
 \arguments{
 \item{arg}{The argument to match against choices. Can be \code{NULL} or a character vector.}
@@ -13,6 +13,10 @@ MatchArg(arg, choices, default = choices[1])
 
 \item{default}{The default value to return if no match is found and \code{arg} is \code{NULL}.
 Defaults to the first element of \code{choices}.}
+
+\item{call}{caller env}
+
+\item{...}{No usage}
 }
 \value{
 Returns the matched choice from the \code{choices} vector. If no match is found
