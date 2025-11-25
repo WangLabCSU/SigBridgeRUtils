@@ -63,7 +63,7 @@ normalize.quantiles <- function(x, copy = TRUE, keep.names = FALSE, ...) {
 
     sorted_mat <- apply(mat, 2, sort, na.last = TRUE)
 
-    target_dist <- rowMeans(sorted_mat, na.rm = TRUE)
+    target_dist <- rowMeans2(sorted_mat, na.rm = TRUE)
 
     rank_mat <- apply(mat, 2, function(col) {
         match(col, sort(col, na.last = NA))

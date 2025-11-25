@@ -54,6 +54,15 @@ MatchArg <- function(
     call = rlang::caller_env(),
     ...
 ) {
+    if (length(choices) == 0) {
+        cli::cli_abort(
+            c(
+                "x" = "No choices provided.",
+                "i" = "Choices must be a non-empty character vector."
+            ),
+            class = "MatchArgError"
+        )
+    }
     if (is.null(arg)) {
         return(default)
     }

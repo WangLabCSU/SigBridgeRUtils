@@ -2,6 +2,8 @@
 % Please edit documentation in R/11_matrixStats.R, R/14_preprocessCore.R
 \name{matrix-stats}
 \alias{matrix-stats}
+\alias{rowMeans2}
+\alias{colMeans2}
 \alias{rowVars}
 \alias{colVars}
 \alias{rowSds}
@@ -10,6 +12,10 @@
 \alias{normalize.quantiles}
 \title{Matrix Statistics Functions (Not Necessarily)}
 \usage{
+rowMeans2(x, na.rm = FALSE, ...)
+
+colMeans2(x, na.rm = FALSE, ...)
+
 rowVars(x, na.rm = FALSE, ...)
 
 colVars(x, na.rm = FALSE, ...)
@@ -39,6 +45,10 @@ or modify in-place (FALSE).}
 \value{
 A numeric vector of length nrow(x) containing row variances.
 
+A numeric vector of length nrow(x) containing row variances.
+
+A numeric vector of length nrow(x) containing row variances.
+
 A numeric vector of length ncol(x) containing column variances.
 
 A numeric vector of length nrow(x) containing row standard deviations.
@@ -53,6 +63,12 @@ A numeric matrix of the same dimensions as x with quantile-normalized data.
 A collection of functions for computing matrix statistics with fallback
 implementations when specialized packages are not available. These functions
 provide efficient row-wise and column-wise computations for large matrices.
+
+rowMeans2 computes the mean value for each row of a numeric matrix.
+Uses matrixStats::rowVars if available, otherwise provides a base R implementation.
+
+colMeans2 computes the mean value for each column of a numeric matrix.
+Uses matrixStats::rowVars if available, otherwise provides a base R implementation.
 
 rowVars computes the variance for each row of a numeric matrix.
 Uses matrixStats::rowVars if available, otherwise provides a base R implementation.

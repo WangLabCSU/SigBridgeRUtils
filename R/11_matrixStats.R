@@ -6,6 +6,57 @@
 #' provide efficient row-wise and column-wise computations for large matrices.
 NULL
 
+
+#' @rdname matrix-stats
+#' @description
+#' rowMeans2 computes the mean value for each row of a numeric matrix.
+#' Uses matrixStats::rowVars if available, otherwise provides a base R implementation.
+#'
+#' @param x A numeric matrix or array. For row* functions, rows represent
+#' observations and columns represent variables.
+#' @param na.rm Logical indicating whether to remove missing values.
+#' @param ... Additional arguments passed to methods.
+#'
+#' @return A numeric vector of length nrow(x) containing row variances.
+#'
+#'
+#' @export
+rowMeans2 <- function(x, na.rm = FALSE, ...) {
+    if (rlang::is_installed("matrixStats")) {
+        return(getExportedValue("matrixStats", "rowMeans2")(
+            x,
+            na.rm = na.rm,
+            ...
+        ))
+    }
+    rowMeans(x, na.rm = na.rm, ...)
+}
+
+#' @rdname matrix-stats
+#' @description
+#' colMeans2 computes the mean value for each column of a numeric matrix.
+#' Uses matrixStats::rowVars if available, otherwise provides a base R implementation.
+#'
+#' @param x A numeric matrix or array. For row* functions, rows represent
+#' observations and columns represent variables.
+#' @param na.rm Logical indicating whether to remove missing values.
+#' @param ... Additional arguments passed to methods.
+#'
+#' @return A numeric vector of length nrow(x) containing row variances.
+#'
+#'
+#' @export
+colMeans2 <- function(x, na.rm = FALSE, ...) {
+    if (rlang::is_installed("matrixStats")) {
+        return(getExportedValue("matrixStats", "colMeans2")(
+            x,
+            na.rm = na.rm,
+            ...
+        ))
+    }
+    colMeans(x, na.rm = na.rm, ...)
+}
+
 #' @rdname matrix-stats
 #' @description
 #' rowVars computes the variance for each row of a numeric matrix.
