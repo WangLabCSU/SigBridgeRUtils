@@ -1,5 +1,3 @@
-# * ------------------- other function ----------------------
-
 #' @title Safely Add Miscellaneous Data to Seurat Object
 #'
 #' @description
@@ -51,7 +49,7 @@ AddMisc <- function(seurat_obj, ..., cover = TRUE) {
     }
 
     # Get the key-value pairs from ... arguments
-    dots <- list(...)
+    dots <- rlang::list2(...)
     if (length(dots) == 0L) {
         return(seurat_obj)
     }

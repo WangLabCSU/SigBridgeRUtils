@@ -9,6 +9,7 @@
 \alias{rowSds}
 \alias{colSds}
 \alias{colQuantiles}
+\alias{rowMaxs}
 \alias{normalize.quantiles}
 \title{Matrix Statistics Functions (Not Necessarily)}
 \usage{
@@ -26,16 +27,32 @@ colSds(x, na.rm = FALSE, ...)
 
 colQuantiles(x, probs = seq(0, 1, 0.25), ...)
 
+rowMaxs(
+  x,
+  rows = NULL,
+  cols = NULL,
+  na.rm = FALSE,
+  dim. = dim(x),
+  ...,
+  useNames = TRUE
+)
+
 normalize.quantiles(x, copy = TRUE, keep.names = FALSE, ...)
 }
 \arguments{
 \item{x}{A numeric matrix where columns represent samples and rows represent features.}
 
-\item{na.rm}{Logical indicating whether to remove missing values.}
+\item{na.rm}{Logical indicating whether to remove missing values}
 
 \item{...}{Additional arguments (currently not used).}
 
 \item{probs}{Numeric vector of probabilities with values between 0 and 1.}
+
+\item{rows, cols}{Indices specifying subset of rows/columns to operate over}
+
+\item{dim.}{Dimensions of the input matrix}
+
+\item{useNames}{Logical indicating whether to preserve row names in output}
 
 \item{copy}{Logical indicating whether to work on a copy of the matrix (TRUE)
 or modify in-place (FALSE).}
@@ -56,6 +73,8 @@ A numeric vector of length nrow(x) containing row standard deviations.
 A numeric vector of length ncol(x) containing column standard deviations.
 
 A matrix of quantiles with length(probs) rows and ncol(x) columns.
+
+A numeric vector of length nrow(x) containing row maximums
 
 A numeric matrix of the same dimensions as x with quantile-normalized data.
 }
@@ -84,6 +103,10 @@ Uses matrixStats::colSds if available, otherwise computes as the square root of 
 
 colQuantiles computes quantiles for each column of a numeric matrix.
 Uses matrixStats::colQuantiles if available, otherwise uses base R quantile function.
+
+rowMaxs computes the maximum value for each row of a numeric matrix.
+Uses matrixStats::rowMaxs or sparseMatrixStats::rowMaxs if available,
+otherwise provides a base R implementation.
 
 normalize.quantiles performs quantile normalization on a matrix, transforming
 the distributions of each column to match a common target distribution.
@@ -125,6 +148,15 @@ specific_quantiles <- colQuantiles(mat, probs = c(0.1, 0.5, 0.9))
 
 mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
 
+# Compute row maximums
+row_maxs <- rowMaxs(mat)
+
+# With missing values
+mat[1, 1] <- NA
+row_maxs_na <- rowMaxs(mat, na.rm = TRUE)
+
+mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
+
 # Perform quantile normalization
 normalized_mat <- normalize.quantiles(mat)
 
@@ -137,13 +169,7 @@ normalized_with_names <- normalize.quantiles(mat, keep.names = TRUE)
 \seealso{
 \code{\link[matrixStats:rowVars]{matrixStats::rowVars()}} for the underlying implementation
 
-\code{\link[matrixStats:rowVars]{matrixStats::colVars()}} for the underlying implementation
-
-\code{\link[matrixStats:rowSds]{matrixStats::rowSds()}} for the underlying implementation
-
 \code{\link[matrixStats:rowSds]{matrixStats::colSds()}} for the underlying implementation
-
-\code{\link[matrixStats:rowQuantiles]{matrixStats::colQuantiles()}} for the underlying implementation
 
 \code{\link[preprocessCore:normalize.quantiles]{preprocessCore::normalize.quantiles()}} for the underlying implementation
 }

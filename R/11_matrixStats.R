@@ -22,9 +22,16 @@ NULL
 #'
 #' @export
 rowMeans2 <- function(x, na.rm = FALSE, ...) {
+    if (rlang::is_installed('sparseMatrixStats') && inherits(x, 'Matrix')) {
+        return(getExportedValue('sparseMatrixStats', 'rowMeans2'))(
+            x = x,
+            na.rm = na.rm,
+            ...
+        )
+    }
     if (rlang::is_installed("matrixStats")) {
         return(getExportedValue("matrixStats", "rowMeans2")(
-            x,
+            x = x,
             na.rm = na.rm,
             ...
         ))
@@ -47,9 +54,16 @@ rowMeans2 <- function(x, na.rm = FALSE, ...) {
 #'
 #' @export
 colMeans2 <- function(x, na.rm = FALSE, ...) {
+    if (rlang::is_installed('sparseMatrixStats') && inherits(x, 'Matrix')) {
+        return(getExportedValue('sparseMatrixStats', 'colMeans2'))(
+            x = x,
+            na.rm = na.rm,
+            ...
+        )
+    }
     if (rlang::is_installed("matrixStats")) {
         return(getExportedValue("matrixStats", "colMeans2")(
-            x,
+            x = x,
             na.rm = na.rm,
             ...
         ))
@@ -82,9 +96,16 @@ colMeans2 <- function(x, na.rm = FALSE, ...) {
 #' @seealso [matrixStats::rowVars()] for the underlying implementation
 #' @export
 rowVars <- function(x, na.rm = FALSE, ...) {
+    if (rlang::is_installed('sparseMatrixStats') && inherits(x, 'Matrix')) {
+        return(getExportedValue('sparseMatrixStats', 'rowVars'))(
+            x = x,
+            na.rm = na.rm,
+            ...
+        )
+    }
     if (rlang::is_installed("matrixStats")) {
         return(getExportedValue("matrixStats", "rowVars")(
-            x,
+            x = x,
             na.rm = na.rm,
             ...
         ))
@@ -116,12 +137,18 @@ rowVars <- function(x, na.rm = FALSE, ...) {
 #' mat[1, 1] <- NA
 #' col_vars_na <- colVars(mat, na.rm = TRUE)
 #'
-#' @seealso [matrixStats::colVars()] for the underlying implementation
 #' @export
 colVars <- function(x, na.rm = FALSE, ...) {
+    if (rlang::is_installed('sparseMatrixStats') && inherits(x, 'Matrix')) {
+        return(getExportedValue('sparseMatrixStats', 'colVars'))(
+            x = x,
+            na.rm = na.rm,
+            ...
+        )
+    }
     if (rlang::is_installed("matrixStats")) {
         return(getExportedValue("matrixStats", "colVars")(
-            x,
+            x = x,
             na.rm = na.rm,
             ...
         ))
@@ -146,13 +173,23 @@ colVars <- function(x, na.rm = FALSE, ...) {
 #' mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
 #' row_sds <- rowSds(mat)
 #'
-#' @seealso [matrixStats::rowSds()] for the underlying implementation
 #' @export
 rowSds <- function(x, na.rm = FALSE, ...) {
-    if (rlang::is_installed("matrixStats")) {
-        return(getExportedValue("matrixStats", "rowSds")(x, na.rm = na.rm, ...))
+    if (rlang::is_installed("sparseMatrixStats") && inherits(x, 'Matrix')) {
+        return(getExportedValue("sparseMatrixStats", "rowSds")(
+            x = x,
+            na.rm = na.rm,
+            ...
+        ))
     }
-    sqrt(rowVars(x, na.rm = na.rm, ...))
+    if (rlang::is_installed("matrixStats")) {
+        return(getExportedValue("matrixStats", "rowSds")(
+            x = x,
+            na.rm = na.rm,
+            ...
+        ))
+    }
+    sqrt(rowVars(x = x, na.rm = na.rm, ...))
 }
 
 #' @rdname matrix-stats
@@ -169,8 +206,19 @@ rowSds <- function(x, na.rm = FALSE, ...) {
 #' @seealso [matrixStats::colSds()] for the underlying implementation
 #' @export
 colSds <- function(x, na.rm = FALSE, ...) {
+    if (rlang::is_installed('sparseMatrixStats') && inherits(x, 'Matrix')) {
+        return(getExportedValue('sparseMatrixStats', 'colSds')(
+            x = x,
+            na.rm = na.rm,
+            ...
+        ))
+    }
     if (rlang::is_installed("matrixStats")) {
-        return(getExportedValue("matrixStats", "colSds")(x, na.rm = na.rm))
+        return(getExportedValue("matrixStats", "colSds")(
+            x = x,
+            na.rm = na.rm,
+            ...
+        ))
     }
     sqrt(colVars(x, na.rm = na.rm, ...))
 }
@@ -194,15 +242,150 @@ colSds <- function(x, na.rm = FALSE, ...) {
 #' # Compute specific quantiles
 #' specific_quantiles <- colQuantiles(mat, probs = c(0.1, 0.5, 0.9))
 #'
-#' @seealso [matrixStats::colQuantiles()] for the underlying implementation
 #' @export
 colQuantiles <- function(x, probs = seq(0, 1, 0.25), ...) {
+    if (rlang::is_installed('sparseMatrixStats') && inherits(x, 'Matrix')) {
+        return(getExportedValue('sparseMatrixStats', 'colQuantiles')(
+            x = x,
+            probs = probs,
+            ...
+        ))
+    }
     if (rlang::is_installed("matrixStats")) {
         return(getExportedValue("matrixStats", "colQuantiles")(
-            x,
+            x = x,
             probs = probs,
             ...
         ))
     }
     stats::quantile(x, probs = probs, ...)
+}
+
+#' @rdname matrix-stats
+#' @description
+#' rowMaxs computes the maximum value for each row of a numeric matrix.
+#' Uses matrixStats::rowMaxs or sparseMatrixStats::rowMaxs if available,
+#' otherwise provides a base R implementation.
+#'
+#' @param x A numeric matrix or array
+#' @param rows,cols Indices specifying subset of rows/columns to operate over
+#' @param na.rm Logical indicating whether to remove missing values
+#' @param dim. Dimensions of the input matrix
+#' @param useNames Logical indicating whether to preserve row names in output
+#' @param ... Additional arguments passed to methods
+#'
+#' @return A numeric vector of length nrow(x) containing row maximums
+#'
+#' @examples
+#' mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
+#'
+#' # Compute row maximums
+#' row_maxs <- rowMaxs(mat)
+#'
+#' # With missing values
+#' mat[1, 1] <- NA
+#' row_maxs_na <- rowMaxs(mat, na.rm = TRUE)
+#'
+#' @export
+rowMaxs <- function(
+    x,
+    rows = NULL,
+    cols = NULL,
+    na.rm = FALSE,
+    dim. = dim(x),
+    ...,
+    useNames = TRUE
+) {
+    if (rlang::is_installed('sparseMatrixStats') && inherits(x, 'Matrix')) {
+        return(getExportedValue("sparseMatrixStats", "rowMaxs")(
+            x = x,
+            rows = rows,
+            cols = cols,
+            na.rm = na.rm,
+            ...,
+            useNames = useNames
+        ))
+    }
+    if (rlang::is_installed("matrixStats")) {
+        return(getExportedValue("matrixStats", "rowMaxs")(
+            x = x,
+            rows = rows,
+            cols = cols,
+            na.rm = na.rm,
+            dim. = dim.,
+            ...,
+            useNames = useNames
+        ))
+    }
+
+    if (!is.matrix(x)) {
+        x <- as.matrix(x)
+    }
+
+    if (!is.null(rows) || !is.null(cols)) {
+        rows <- rows %||% seq_len(nrow(x))
+        cols <- cols %||% seq_len(ncol(x))
+        x <- x[rows, cols, drop = FALSE]
+    }
+
+    nr <- nrow(x)
+    nc <- ncol(x)
+
+    if (nc == 0) {
+        result <- rep(NA_real_, nr)
+    } else if (nr == 0) {
+        result <- numeric(0)
+    } else if (nc == 1) {
+        result <- as.numeric(x[, 1])
+    } else {
+        row_has_na <- rowSums(is.na(x)) > 0
+
+        if (!any(row_has_na)) {
+            # 无NA：直接用max.col()
+            idx <- max.col(x, ties.method = "first")
+            result <- x[cbind(seq_len(nr), idx)]
+        } else if (all(row_has_na) && !na.rm) {
+            # 全是NA且不移除：全返回NA
+            result <- rep(NA_real_, nr)
+        } else {
+            # 混合情况
+            result <- numeric(nr)
+
+            # 无NA的行
+            clean_rows <- !row_has_na
+            if (any(clean_rows)) {
+                idx <- max.col(
+                    x[clean_rows, , drop = FALSE],
+                    ties.method = "first"
+                )
+                result[clean_rows] <- x[clean_rows, , drop = FALSE][
+                    seq_len(cbind(sum(clean_rows))),
+                    idx
+                ]
+            }
+
+            # 有NA的行
+            if (any(row_has_na)) {
+                if (na.rm) {
+                    # 移除NA后计算
+                    result[row_has_na] <- apply(
+                        x[row_has_na, , drop = FALSE],
+                        1,
+                        max,
+                        na.rm = TRUE
+                    )
+                } else {
+                    # 保留NA
+                    result[row_has_na] <- NA_real_
+                }
+            }
+        }
+
+        # 保留行名
+        if (useNames && !is.null(rownames(x))) {
+            names(result) <- rownames(x)
+        }
+
+        result
+    }
 }

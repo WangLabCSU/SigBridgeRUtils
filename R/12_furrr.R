@@ -1,7 +1,7 @@
 #' @title Future plan for furrr
 #' @export
 #' @inheritParams future::plan
-#' @param ... pass to future::plan()
+#' @importFrom future multisession multicore cluster
 #'
 plan <- function(
     strategy = NULL,
