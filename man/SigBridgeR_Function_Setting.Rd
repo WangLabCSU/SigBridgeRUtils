@@ -11,7 +11,7 @@ setFuncOption(...)
 
 getFuncOption(option, default = NULL)
 
-checkFuncOption(option, value)
+checkFuncOption(option, value, call = rlang::caller_env())
 }
 \arguments{
 \item{...}{Named arguments representing option-value pairs. Options can be
@@ -24,6 +24,8 @@ it will be automatically added.}
 Defaults to NULL.}
 
 \item{value}{The proposed value to assign to the option}
+
+\item{call}{The execution environment of a currently running function}
 }
 \value{
 Invisibly returns NULL. The function is called for its side effects

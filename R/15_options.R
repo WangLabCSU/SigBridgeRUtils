@@ -87,6 +87,7 @@ getFuncOption <- function(option, default = NULL) {
 #'
 #' @param option Character string specifying the option name to check
 #' @param value The proposed value to assign to the option
+#' @param call The execution environment of a currently running function
 #'
 #' @return No return value. The function throws an error if the value doesn't
 #' meet the required specifications for the given option.
@@ -102,44 +103,54 @@ getFuncOption <- function(option, default = NULL) {
 #' The function is automatically called by setFuncOption to ensure all
 #' configuration options are valid before they are set.
 #'
-checkFuncOption <- function(option, value) {
+checkFuncOption <- function(option, value, call = rlang::caller_env()) {
   if (!startsWith(option, "SigBridgeR.")) {
     option <- paste0("SigBridgeR.", option)
   }
   checker <- list(
     'scalar_logical' = function(x) {
       if (!rlang::is_scalar_logical(x)) {
-        cli::cli_abort(c(
-          "x" = "{.var {option}} must be a single logical value.",
-          ">" = "Current value is {.val {x}} ({.type {class(x)}})."
-        ))
+        cli::cli_abort(
+          c(
+            "x" = "{.var {option}} must be a single logical value.",
+            ">" = "Current value is {.val {x}} ({.type {class(x)}})."
+          ),
+          call = call
+        )
       }
     },
     'scalar_integer' = function(x) {
       if (!rlang::is_scalar_integer(x)) {
-        cli::cli_abort(c(
-          "x" = "{.var {option}} must be an integer value.",
-          ">" = "Current value is {.val {x}} ({.type {class(x)}})."
-        ))
+        cli::cli_abort(
+          c(
+            "x" = "{.var {option}} must be an integer value.",
+            ">" = "Current value is {.val {x}} ({.type {class(x)}})."
+          ),
+          call = call
+        )
       }
     },
     'scalar_character' = function(x) {
-      if (rlang::is_scalar_character(x)) {
-        cli::cli_abort(c(
-          "x" = "{.var {option}} must be a single character string.",
-          ">" = "Current value is {.val {x}} ({.type {class(x)}})."
-        ))
+      if (!rlang::is_scalar_character(x)) {
+        cli::cli_abort(
+          c(
+            "x" = "{.var {option}} must be a single character string.",
+            ">" = "Current value is {.val {x}} ({.type {class(x)}})."
+          ),
+          call = call
+        )
       }
     }
   )
   switch(
     option,
-    "verbose" = ,
-    "parallel" = checker$scalar_logical(value),
-    "parallel.type" = checker$scalar_character(value),
-    "workers" = ,
-    "timeout" = ,
-    "seed" = checker$scalar_integer(value)
+    "SigBridgeR.verbose" = ,
+    "SigBridgeR.parallel" = checker$scalar_logical(value),
+    "SigBridgeR.parallel.type" = checker$scalar_character(value),
+    "SigBridgeR.workers" = ,
+    "SigBridgeR.timeout" = ,
+    "SigBridgeR.seed" = checker$scalar_integer(value),
+    cli::cli_abort('Unknown option: {.var {option}}')
   )
 
   invisible()
