@@ -4,22 +4,26 @@
 \alias{SigBridgeR_Function_Setting}
 \alias{setFuncOption}
 \alias{getFuncOption}
+\alias{checkFuncOption}
 \title{Configuration Functions for SigBridgeR Package}
 \usage{
 setFuncOption(...)
 
 getFuncOption(option, default = NULL)
+
+checkFuncOption(option, value)
 }
 \arguments{
 \item{...}{Named arguments representing option-value pairs. Options can be
 provided with or without the "SigBridgeR." prefix. If the prefix is missing,
 it will be automatically added.}
 
-\item{option}{Character string specifying the option name to retrieve.
-The "SigBridgeR." prefix is optional and will be added if missing.}
+\item{option}{Character string specifying the option name to check}
 
 \item{default}{The default value to return if the option is not set.
 Defaults to NULL.}
+
+\item{value}{The proposed value to assign to the option}
 }
 \value{
 Invisibly returns NULL. The function is called for its side effects
@@ -27,6 +31,9 @@ of setting package options.
 
 The value of the specified option if it exists, otherwise the
 provided default value.
+
+No return value. The function throws an error if the value doesn't
+meet the required specifications for the given option.
 }
 \description{
 These functions provide a centralized configuration system for the SigBridgeR
@@ -40,6 +47,21 @@ ensuring proper namespace isolation.
 getFuncOption retrieves configuration options for the SigBridgeR package.
 The function automatically handles the "SigBridgeR." prefix, allowing users
 to reference options with or without the explicit prefix.
+
+checkFuncOption validates configuration options for the SigBridgeR package.
+This function ensures that all options meet type and value requirements
+before they are set in the global options.
+}
+\details{
+This function performs the following validations:
+\describe{
+\item{verbose, parallel}{Must be single logical values (TRUE/FALSE)}
+\item{parallel.type}{Must be a single character string}
+\item{workers, timeout, seed}{Must be single integer values}
+}
+
+The function is automatically called by setFuncOption to ensure all
+configuration options are valid before they are set.
 }
 \section{Available Opions}{
 
@@ -47,7 +69,7 @@ to reference options with or without the explicit prefix.
 \item \code{verbose}: A logical value indicating whether to print verbose messages, defaults to \code{TRUE}
 \item \code{parallel}: A logical value indicating whether to use parallel processing, defaults to `FALSE``
 \item \code{parallel.type}: A character string specifying the type of parallel processing to use, defaults to \code{"multisession"}
-\item \code{workers}: An integer specifying the number of workers to use for parallel processing, defaults to \code{4L}
+\item \code{workers}: An integer specifying the number of workers to use for parallel processing (in R), defaults to \code{4L}
 \item \code{timeout}: An integer specifying the timeout in seconds for parallel processing, defaults to `180L``
 \item \code{seed}: An integer specifying the random seed for reproducible results, defaults to `123L``
 }

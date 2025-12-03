@@ -84,7 +84,7 @@ MatchArg <- function(
     }
     cli::cli_abort(
         c(
-            "x" = "{.val {arg}} is not a valid choice.",
+            "x" = "{.val {arg}} is not a valid choice for {.arg {deparse(substitute(arg))}}.",
             "i" = "Must be one of: {.val {choices}}."
         ),
         class = "MatchArgError",

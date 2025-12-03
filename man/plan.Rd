@@ -17,8 +17,6 @@ plan(
 \arguments{
 \item{strategy}{A future backend or the name of one.}
 
-\item{...}{pass to future::plan()}
-
 \item{substitute}{If \code{TRUE}, the \code{strategy} expression is
 \code{substitute()}:d, otherwise not.}
 
