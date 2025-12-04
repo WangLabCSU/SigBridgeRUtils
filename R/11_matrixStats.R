@@ -9,7 +9,7 @@ NULL
 
 #' @rdname matrix-stats
 #' @description
-#' rowMeans2 computes the mean value for each row of a numeric matrix.
+#' rowMeans3 computes the mean value for each row of a numeric matrix.
 #' Uses matrixStats::rowVars if available, otherwise provides a base R implementation.
 #'
 #' @param x A numeric matrix or array. For row* functions, rows represent
@@ -21,7 +21,7 @@ NULL
 #'
 #'
 #' @export
-rowMeans2 <- function(x, na.rm = FALSE, ...) {
+rowMeans3 <- function(x, na.rm = FALSE, ...) {
     if (
         rlang::is_installed('sparseMatrixStats') && inherits(x, 'sparseMatrix')
     ) {
@@ -50,7 +50,7 @@ rowMeans2 <- function(x, na.rm = FALSE, ...) {
 
 #' @rdname matrix-stats
 #' @description
-#' colMeans2 computes the mean value for each column of a numeric matrix.
+#' colMeans3 computes the mean value for each column of a numeric matrix.
 #' Uses matrixStats::rowVars if available, otherwise provides a base R implementation.
 #'
 #' @param x A numeric matrix or array. For row* functions, rows represent
@@ -62,7 +62,7 @@ rowMeans2 <- function(x, na.rm = FALSE, ...) {
 #'
 #'
 #' @export
-colMeans2 <- function(x, na.rm = FALSE, ...) {
+colMeans3 <- function(x, na.rm = FALSE, ...) {
     if (
         rlang::is_installed('sparseMatrixStats') && inherits(x, 'sparseMatrix')
     ) {
@@ -91,7 +91,7 @@ colMeans2 <- function(x, na.rm = FALSE, ...) {
 
 #' @rdname matrix-stats
 #' @description
-#' rowVars computes the variance for each row of a numeric matrix.
+#' rowVars3 computes the variance for each row of a numeric matrix.
 #' Uses matrixStats::rowVars if available, otherwise provides a base R implementation.
 #'
 #' @param x A numeric matrix or array. For row* functions, rows represent
@@ -105,15 +105,15 @@ colMeans2 <- function(x, na.rm = FALSE, ...) {
 #' mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
 #'
 #' # Compute row variances
-#' row_vars <- rowVars(mat)
+#' row_vars <- rowVars3(mat)
 #'
 #' # With missing values
 #' mat[1, 1] <- NA
-#' row_vars_na <- rowVars(mat, na.rm = TRUE)
+#' row_vars_na <- rowVars3(mat, na.rm = TRUE)
 #'
 #' @seealso [matrixStats::rowVars()] for the underlying implementation
 #' @export
-rowVars <- function(x, na.rm = FALSE, ...) {
+rowVars3 <- function(x, na.rm = FALSE, ...) {
     if (
         rlang::is_installed('sparseMatrixStats') && inherits(x, 'sparseMatrix')
     ) {
@@ -146,7 +146,7 @@ rowVars <- function(x, na.rm = FALSE, ...) {
 
 #' @rdname matrix-stats
 #' @description
-#' colVars computes the variance for each column of a numeric matrix.
+#' colVars3 computes the variance for each column of a numeric matrix.
 #' Uses matrixStats::colVars if available, otherwise provides a base R implementation.
 #'
 #'
@@ -156,14 +156,14 @@ rowVars <- function(x, na.rm = FALSE, ...) {
 #' mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
 #'
 #' # Compute column variances
-#' col_vars <- colVars(mat)
+#' col_vars <- colVars3(mat)
 #'
 #' # With missing values
 #' mat[1, 1] <- NA
-#' col_vars_na <- colVars(mat, na.rm = TRUE)
+#' col_vars_na <- colVars3(mat, na.rm = TRUE)
 #'
 #' @export
-colVars <- function(x, na.rm = FALSE, ...) {
+colVars3 <- function(x, na.rm = FALSE, ...) {
     if (
         rlang::is_installed('sparseMatrixStats') && inherits(x, 'sparseMatrix')
     ) {
@@ -196,7 +196,7 @@ colVars <- function(x, na.rm = FALSE, ...) {
 
 #' @rdname matrix-stats
 #' @description
-#' rowSds computes the standard deviation for each row of a numeric matrix.
+#' rowSds3 computes the standard deviation for each row of a numeric matrix.
 #' Uses matrixStats::rowSds if available, otherwise computes as the square root of row variances.
 #'
 #'
@@ -204,10 +204,10 @@ colVars <- function(x, na.rm = FALSE, ...) {
 #'
 #' @examples
 #' mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
-#' row_sds <- rowSds(mat)
+#' row_sds <- rowSds3(mat)
 #'
 #' @export
-rowSds <- function(x, na.rm = FALSE, ...) {
+rowSds3 <- function(x, na.rm = FALSE, ...) {
     if (
         rlang::is_installed("sparseMatrixStats") && inherits(x, 'sparseMatrix')
     ) {
@@ -224,23 +224,23 @@ rowSds <- function(x, na.rm = FALSE, ...) {
             ...
         ))
     }
-    sqrt(rowVars(x = x, na.rm = na.rm, ...))
+    sqrt(rowVars3(x = x, na.rm = na.rm, ...))
 }
 
 #' @rdname matrix-stats
 #' @description
-#' colSds computes the standard deviation for each column of a numeric matrix.
+#' colSds3 computes the standard deviation for each column of a numeric matrix.
 #' Uses matrixStats::colSds if available, otherwise computes as the square root of column variances.
 #'
 #' @return A numeric vector of length ncol(x) containing column standard deviations.
 #'
 #' @examples
 #' mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
-#' col_sds <- colSds(mat)
+#' col_sds <- colSds3(mat)
 #'
 #' @seealso [matrixStats::colSds()] for the underlying implementation
 #' @export
-colSds <- function(x, na.rm = FALSE, ...) {
+colSds3 <- function(x, na.rm = FALSE, ...) {
     if (
         rlang::is_installed('sparseMatrixStats') && inherits(x, 'sparseMatrix')
     ) {
@@ -257,12 +257,12 @@ colSds <- function(x, na.rm = FALSE, ...) {
             ...
         ))
     }
-    sqrt(colVars(x, na.rm = na.rm, ...))
+    sqrt(colVars3(x, na.rm = na.rm, ...))
 }
 
 #' @rdname matrix-stats
 #' @description
-#' colQuantiles computes quantiles for each column of a numeric matrix.
+#' colQuantiles3 computes quantiles for each column of a numeric matrix.
 #' Uses matrixStats::colQuantiles if available, otherwise uses base R quantile function.
 #'
 #' @param probs Numeric vector of probabilities with values between 0 and 1.
@@ -274,13 +274,13 @@ colSds <- function(x, na.rm = FALSE, ...) {
 #' mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
 #'
 #' # Compute quartiles for each column
-#' quartiles <- colQuantiles(mat)
+#' quartiles <- colQuantiles3(mat)
 #'
 #' # Compute specific quantiles
-#' specific_quantiles <- colQuantiles(mat, probs = c(0.1, 0.5, 0.9))
+#' specific_quantiles <- colQuantiles3(mat, probs = c(0.1, 0.5, 0.9))
 #'
 #' @export
-colQuantiles <- function(x, probs = seq(0, 1, 0.25), ...) {
+colQuantiles3 <- function(x, probs = seq(0, 1, 0.25), ...) {
     if (
         rlang::is_installed('sparseMatrixStats') && inherits(x, 'sparseMatrix')
     ) {
@@ -303,7 +303,7 @@ colQuantiles <- function(x, probs = seq(0, 1, 0.25), ...) {
 
 #' @rdname matrix-stats
 #' @description
-#' rowMaxs computes the maximum value for each row of a numeric matrix.
+#' rowMaxs3 computes the maximum value for each row of a numeric matrix.
 #' Uses matrixStats::rowMaxs or sparseMatrixStats::rowMaxs if available,
 #' otherwise provides a base R implementation.
 #'
@@ -320,14 +320,14 @@ colQuantiles <- function(x, probs = seq(0, 1, 0.25), ...) {
 #' mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
 #'
 #' # Compute row maximums
-#' row_maxs <- rowMaxs(mat)
+#' row_maxs <- rowMaxs3(mat)
 #'
 #' # With missing values
 #' mat[1, 1] <- NA
-#' row_maxs_na <- rowMaxs(mat, na.rm = TRUE)
+#' row_maxs_na <- rowMaxs3(mat, na.rm = TRUE)
 #'
 #' @export
-rowMaxs <- function(
+rowMaxs3 <- function(
     x,
     rows = NULL,
     cols = NULL,
@@ -359,10 +359,6 @@ rowMaxs <- function(
             useNames = useNames
         ))
     }
-    if (rlang::is_installed("Matrix") && inherits(x, "denseMatrix")) {
-        # mask base R functions
-        rowSums <- getExportedValue("Matrix", "rowSums")
-    }
 
     if (!is.null(rows) || !is.null(cols)) {
         rows <- rows %||% seq_len(nrow(x))
@@ -380,7 +376,7 @@ rowMaxs <- function(
     } else if (nc == 1) {
         result <- as.numeric(x[, 1])
     } else {
-        row_has_na <- rowSums(is.na(x)) > 0
+        row_has_na <- rowSums3(is.na(x)) > 0
 
         if (!any(row_has_na)) {
             # 无NA：直接用max.col()
@@ -430,4 +426,85 @@ rowMaxs <- function(
 
         result
     }
+}
+
+#' @rdname matrix-stats
+#' @description
+#' colSums3 computes the sum for each column of a numeric matrix.
+#' Uses sparseMatrixStats::colSums2 or matrixStats::colSums2 if available;
+#' falls back to base::colSums otherwise.
+#'
+#' @param x A numeric matrix, array, or Matrix object.
+#' @param na.rm Logical indicating whether to remove missing values.
+#' @param ... Additional arguments passed to methods (e.g., `dims` in base).
+#'
+#' @return A numeric vector of length `ncol(x)` containing column sums.
+#'
+#' @export
+colSums3 <- function(x, na.rm = FALSE, ...) {
+    if (
+        rlang::is_installed("sparseMatrixStats") && inherits(x, "sparseMatrix")
+    ) {
+        return(getExportedValue("sparseMatrixStats", "colSums2")(
+            x = x,
+            na.rm = na.rm,
+            ...
+        ))
+    }
+    if (rlang::is_installed("matrixStats") && !isS4(x)) {
+        return(getExportedValue("matrixStats", "colSums2")(
+            x = x,
+            na.rm = na.rm,
+            ...
+        ))
+    }
+    if (rlang::is_installed("Matrix") && inherits(x, "denseMatrix")) {
+        return(getExportedValue("Matrix", "colSums")(
+            x = x,
+            na.rm = na.rm,
+            ...
+        ))
+    }
+    colSums(x, na.rm = na.rm, ...)
+}
+
+
+#' @rdname matrix-stats
+#' @description
+#' rowSums3 computes the sum for each row of a numeric matrix.
+#' Uses sparseMatrixStats::rowSums2 or matrixStats::rowSums2 if available;
+#' falls back to base::rowSums otherwise.
+#'
+#' @param x A numeric matrix, array, or Matrix object.
+#' @param na.rm Logical indicating whether to remove missing values.
+#' @param ... Additional arguments passed to methods (e.g., `dims` in base).
+#'
+#' @return A numeric vector of length `nrow(x)` containing row sums.
+#'
+#' @export
+rowSums3 <- function(x, na.rm = FALSE, ...) {
+    if (
+        rlang::is_installed("sparseMatrixStats") && inherits(x, "sparseMatrix")
+    ) {
+        return(getExportedValue("sparseMatrixStats", "rowSums2")(
+            x = x,
+            na.rm = na.rm,
+            ...
+        ))
+    }
+    if (rlang::is_installed("matrixStats") && !isS4(x)) {
+        return(getExportedValue("matrixStats", "rowSums2")(
+            x = x,
+            na.rm = na.rm,
+            ...
+        ))
+    }
+    if (rlang::is_installed("Matrix") && inherits(x, "denseMatrix")) {
+        return(getExportedValue("Matrix", "rowSums")(
+            x = x,
+            na.rm = na.rm,
+            ...
+        ))
+    }
+    rowSums(x, na.rm = na.rm, ...)
 }

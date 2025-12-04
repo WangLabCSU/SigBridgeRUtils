@@ -2,32 +2,34 @@
 % Please edit documentation in R/11_matrixStats.R, R/14_preprocessCore.R
 \name{matrix-stats}
 \alias{matrix-stats}
-\alias{rowMeans2}
-\alias{colMeans2}
-\alias{rowVars}
-\alias{colVars}
-\alias{rowSds}
-\alias{colSds}
-\alias{colQuantiles}
-\alias{rowMaxs}
+\alias{rowMeans3}
+\alias{colMeans3}
+\alias{rowVars3}
+\alias{colVars3}
+\alias{rowSds3}
+\alias{colSds3}
+\alias{colQuantiles3}
+\alias{rowMaxs3}
+\alias{colSums3}
+\alias{rowSums3}
 \alias{normalize.quantiles}
 \title{Matrix Statistics Functions (Not Necessarily)}
 \usage{
-rowMeans2(x, na.rm = FALSE, ...)
+rowMeans3(x, na.rm = FALSE, ...)
 
-colMeans2(x, na.rm = FALSE, ...)
+colMeans3(x, na.rm = FALSE, ...)
 
-rowVars(x, na.rm = FALSE, ...)
+rowVars3(x, na.rm = FALSE, ...)
 
-colVars(x, na.rm = FALSE, ...)
+colVars3(x, na.rm = FALSE, ...)
 
-rowSds(x, na.rm = FALSE, ...)
+rowSds3(x, na.rm = FALSE, ...)
 
-colSds(x, na.rm = FALSE, ...)
+colSds3(x, na.rm = FALSE, ...)
 
-colQuantiles(x, probs = seq(0, 1, 0.25), ...)
+colQuantiles3(x, probs = seq(0, 1, 0.25), ...)
 
-rowMaxs(
+rowMaxs3(
   x,
   rows = NULL,
   cols = NULL,
@@ -37,12 +39,16 @@ rowMaxs(
   useNames = TRUE
 )
 
+colSums3(x, na.rm = FALSE, ...)
+
+rowSums3(x, na.rm = FALSE, ...)
+
 normalize.quantiles(x, copy = TRUE, keep.names = FALSE, ...)
 }
 \arguments{
 \item{x}{A numeric matrix where columns represent samples and rows represent features.}
 
-\item{na.rm}{Logical indicating whether to remove missing values}
+\item{na.rm}{Logical indicating whether to remove missing values.}
 
 \item{...}{Additional arguments (currently not used).}
 
@@ -76,6 +82,10 @@ A matrix of quantiles with length(probs) rows and ncol(x) columns.
 
 A numeric vector of length nrow(x) containing row maximums
 
+A numeric vector of length \code{ncol(x)} containing column sums.
+
+A numeric vector of length \code{nrow(x)} containing row sums.
+
 A numeric matrix of the same dimensions as x with quantile-normalized data.
 }
 \description{
@@ -83,30 +93,38 @@ A collection of functions for computing matrix statistics with fallback
 implementations when specialized packages are not available. These functions
 provide efficient row-wise and column-wise computations for large matrices.
 
-rowMeans2 computes the mean value for each row of a numeric matrix.
+rowMeans3 computes the mean value for each row of a numeric matrix.
 Uses matrixStats::rowVars if available, otherwise provides a base R implementation.
 
-colMeans2 computes the mean value for each column of a numeric matrix.
+colMeans3 computes the mean value for each column of a numeric matrix.
 Uses matrixStats::rowVars if available, otherwise provides a base R implementation.
 
-rowVars computes the variance for each row of a numeric matrix.
+rowVars3 computes the variance for each row of a numeric matrix.
 Uses matrixStats::rowVars if available, otherwise provides a base R implementation.
 
-colVars computes the variance for each column of a numeric matrix.
+colVars3 computes the variance for each column of a numeric matrix.
 Uses matrixStats::colVars if available, otherwise provides a base R implementation.
 
-rowSds computes the standard deviation for each row of a numeric matrix.
+rowSds3 computes the standard deviation for each row of a numeric matrix.
 Uses matrixStats::rowSds if available, otherwise computes as the square root of row variances.
 
-colSds computes the standard deviation for each column of a numeric matrix.
+colSds3 computes the standard deviation for each column of a numeric matrix.
 Uses matrixStats::colSds if available, otherwise computes as the square root of column variances.
 
-colQuantiles computes quantiles for each column of a numeric matrix.
+colQuantiles3 computes quantiles for each column of a numeric matrix.
 Uses matrixStats::colQuantiles if available, otherwise uses base R quantile function.
 
-rowMaxs computes the maximum value for each row of a numeric matrix.
+rowMaxs3 computes the maximum value for each row of a numeric matrix.
 Uses matrixStats::rowMaxs or sparseMatrixStats::rowMaxs if available,
 otherwise provides a base R implementation.
+
+colSums3 computes the sum for each column of a numeric matrix.
+Uses sparseMatrixStats::colSums2 or matrixStats::colSums2 if available;
+falls back to base::colSums otherwise.
+
+rowSums3 computes the sum for each row of a numeric matrix.
+Uses sparseMatrixStats::rowSums2 or matrixStats::rowSums2 if available;
+falls back to base::rowSums otherwise.
 
 normalize.quantiles performs quantile normalization on a matrix, transforming
 the distributions of each column to match a common target distribution.
@@ -117,43 +135,43 @@ a pure R implementation.
 mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
 
 # Compute row variances
-row_vars <- rowVars(mat)
+row_vars <- rowVars3(mat)
 
 # With missing values
 mat[1, 1] <- NA
-row_vars_na <- rowVars(mat, na.rm = TRUE)
+row_vars_na <- rowVars3(mat, na.rm = TRUE)
 
 mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
 
 # Compute column variances
-col_vars <- colVars(mat)
+col_vars <- colVars3(mat)
 
 # With missing values
 mat[1, 1] <- NA
-col_vars_na <- colVars(mat, na.rm = TRUE)
+col_vars_na <- colVars3(mat, na.rm = TRUE)
 
 mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
-row_sds <- rowSds(mat)
+row_sds <- rowSds3(mat)
 
 mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
-col_sds <- colSds(mat)
+col_sds <- colSds3(mat)
 
 mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
 
 # Compute quartiles for each column
-quartiles <- colQuantiles(mat)
+quartiles <- colQuantiles3(mat)
 
 # Compute specific quantiles
-specific_quantiles <- colQuantiles(mat, probs = c(0.1, 0.5, 0.9))
+specific_quantiles <- colQuantiles3(mat, probs = c(0.1, 0.5, 0.9))
 
 mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
 
 # Compute row maximums
-row_maxs <- rowMaxs(mat)
+row_maxs <- rowMaxs3(mat)
 
 # With missing values
 mat[1, 1] <- NA
-row_maxs_na <- rowMaxs(mat, na.rm = TRUE)
+row_maxs_na <- rowMaxs3(mat, na.rm = TRUE)
 
 mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
 
