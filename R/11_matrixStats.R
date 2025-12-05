@@ -45,6 +45,14 @@ rowMeans3 <- function(x, na.rm = FALSE, ...) {
             ...
         )
     }
+    if (is.vector(x)) {
+        cli::cli_warn("x is a vector, use fallback and return a single value")
+        return(getExportedValue("matrixStats", "mean2")(
+            x = x,
+            na.rm = na.rm,
+            ...
+        ))
+    }
     rowMeans(x, na.rm = na.rm, ...)
 }
 
@@ -85,6 +93,14 @@ colMeans3 <- function(x, na.rm = FALSE, ...) {
             na.rm = na.rm,
             ...
         )
+    }
+    if (is.vector(x)) {
+        cli::cli_warn("x is a vector, use fallback and return a single value")
+        return(getExportedValue("matrixStats", "mean2")(
+            x = x,
+            na.rm = na.rm,
+            ...
+        ))
     }
     colMeans(x, na.rm = na.rm, ...)
 }
@@ -130,17 +146,12 @@ rowVars3 <- function(x, na.rm = FALSE, ...) {
             ...
         ))
     }
-    if (rlang::is_installed("Matrix") && inherits(x, "denseMatrix")) {
-        # mask base R functions
-        rowSums <- getExportedValue("Matrix", "rowSums")
-        rowMeans <- getExportedValue("Matrix", "rowMeans")
-    }
 
     if (na.rm) {
-        n <- rowSums(!is.na(x))
-        rowSums((x - rowMeans(x, na.rm = TRUE))^2, na.rm = TRUE) / (n - 1)
+        n <- rowSums3(!is.na(x))
+        rowSums3((x - rowMeans3(x, na.rm = TRUE))^2, na.rm = TRUE) / (n - 1)
     } else {
-        rowSums((x - rowMeans(x))^2) / (ncol(x) - 1)
+        rowSums3((x - rowMeans3(x))^2) / (ncol(x) - 1)
     }
 }
 
@@ -181,16 +192,11 @@ colVars3 <- function(x, na.rm = FALSE, ...) {
         ))
     }
 
-    if (rlang::is_installed("Matrix") && inherits(x, "denseMatrix")) {
-        # mask base R functions
-        colSums <- getExportedValue("Matrix", "colSums")
-        colMeans <- getExportedValue("Matrix", "colMeans")
-    }
     if (na.rm) {
-        n <- colSums(!is.na(x))
-        colSums((x - colMeans(x, na.rm = TRUE))^2, na.rm = TRUE) / (n - 1)
+        n <- colSums3(!is.na(x))
+        colSums3((x - colMeans3(x, na.rm = TRUE))^2, na.rm = TRUE) / (n - 1)
     } else {
-        colSums((x - colMeans(x))^2) / (nrow(x) - 1)
+        colSums3((x - colMeans3(x))^2) / (nrow(x) - 1)
     }
 }
 
@@ -297,7 +303,7 @@ colQuantiles3 <- function(x, probs = seq(0, 1, 0.25), ...) {
             ...
         ))
     }
-    # denseMatrix is Okay
+    # denseMatrix is Okay, vector is OK
     stats::quantile(x, probs = probs, ...)
 }
 
@@ -465,6 +471,11 @@ colSums3 <- function(x, na.rm = FALSE, ...) {
             ...
         ))
     }
+    if (is.vector(x)) {
+        cli::cli_warn("x is a vector, use fallback and return a single value")
+        return(getExportedValue("matrixStats", "sum2")(x, na.rm = na.rm, ...))
+    }
+
     colSums(x, na.rm = na.rm, ...)
 }
 
@@ -506,5 +517,10 @@ rowSums3 <- function(x, na.rm = FALSE, ...) {
             ...
         ))
     }
+    if (is.vector(x)) {
+        cli::cli_warn("x is a vector, use fallback and return a single value")
+        return(getExportedValue("matrixStats", "sum2")(x, na.rm = na.rm, ...))
+    }
+
     rowSums(x, na.rm = na.rm, ...)
 }
