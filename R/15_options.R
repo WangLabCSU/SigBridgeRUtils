@@ -32,22 +32,22 @@ NULL
 #'
 #' @export
 setFuncOption <- function(...) {
-    opts <- rlang::list2(...)
-    if (length(opts) > 0) {
-        opt_names <- names(opts)
-        needs_prefix <- !startsWith(opt_names, "SigBridgeR.")
-        opt_names[needs_prefix] <- paste0(
-            "SigBridgeR.",
-            opt_names[needs_prefix]
-        )
-        names(opts) <- opt_names
+  opts <- rlang::list2(...)
+  if (length(opts) > 0) {
+    opt_names <- names(opts)
+    needs_prefix <- !startsWith(opt_names, "SigBridgeR.")
+    opt_names[needs_prefix] <- paste0(
+      "SigBridgeR.",
+      opt_names[needs_prefix]
+    )
+    names(opts) <- opt_names
 
-        purrr::walk2(names(opts), opts, checkFuncOption)
+    purrr::walk2(names(opts), opts, checkFuncOption)
 
-        options(opts)
-    }
+    options(opts)
+  }
 
-    invisible()
+  invisible()
 }
 
 #' @rdname SigBridgeR_Function_Setting
@@ -70,10 +70,10 @@ setFuncOption <- function(...) {
 #'
 #' @export
 getFuncOption <- function(option, default = NULL) {
-    if (!startsWith(option, "SigBridgeR.")) {
-        option <- paste0("SigBridgeR.", option)
-    }
-    getOption(option, default = default)
+  if (!startsWith(option, "SigBridgeR.")) {
+    option <- paste0("SigBridgeR.", option)
+  }
+  getOption(option, default = default)
 }
 
 #' @rdname SigBridgeR_Function_Setting
@@ -92,60 +92,59 @@ getFuncOption <- function(option, default = NULL) {
 #' @details
 #' This function performs the following validations:
 #' \describe{
-#' \item{verbose, parallel}{Must be single logical values (TRUE/FALSE)}
-#' \item{parallel.type}{Must be a single character string}
-#' \item{workers, timeout, seed}{Must be single integer values}
+#' \item{verbose}{Must be single logical values (TRUE/FALSE)}
+#' \item{timeout, seed}{Must be single integer values}
 #' }
 #'
 #' The function is automatically called by setFuncOption to ensure all
 #' configuration options are valid before they are set.
 #'
 checkFuncOption <- function(option, value, call = rlang::caller_env()) {
-    if (!startsWith(option, "SigBridgeR.")) {
-        option <- paste0("SigBridgeR.", option)
+  if (!startsWith(option, "SigBridgeR.")) {
+    option <- paste0("SigBridgeR.", option)
+  }
+  checker <- list(
+    'scalar_logical' = function(x) {
+      if (!rlang::is_scalar_logical(x)) {
+        cli::cli_abort(
+          c(
+            "x" = "{.var {option}} must be a single logical value.",
+            ">" = "Current value is {.val {x}} ({.type {class(x)}})."
+          ),
+          call = call
+        )
+      }
+    },
+    'scalar_integer' = function(x) {
+      if (!rlang::is_scalar_integer(x)) {
+        cli::cli_abort(
+          c(
+            "x" = "{.var {option}} must be an integer value.",
+            ">" = "Current value is {.val {x}} ({.type {class(x)}})."
+          ),
+          call = call
+        )
+      }
+    },
+    'scalar_character' = function(x) {
+      if (!rlang::is_scalar_character(x)) {
+        cli::cli_abort(
+          c(
+            "x" = "{.var {option}} must be a single character string.",
+            ">" = "Current value is {.val {x}} ({.type {class(x)}})."
+          ),
+          call = call
+        )
+      }
     }
-    checker <- list(
-        'scalar_logical' = function(x) {
-            if (!rlang::is_scalar_logical(x)) {
-                cli::cli_abort(
-                    c(
-                        "x" = "{.var {option}} must be a single logical value.",
-                        ">" = "Current value is {.val {x}} ({.type {class(x)}})."
-                    ),
-                    call = call
-                )
-            }
-        },
-        'scalar_integer' = function(x) {
-            if (!rlang::is_scalar_integer(x)) {
-                cli::cli_abort(
-                    c(
-                        "x" = "{.var {option}} must be an integer value.",
-                        ">" = "Current value is {.val {x}} ({.type {class(x)}})."
-                    ),
-                    call = call
-                )
-            }
-        },
-        'scalar_character' = function(x) {
-            if (!rlang::is_scalar_character(x)) {
-                cli::cli_abort(
-                    c(
-                        "x" = "{.var {option}} must be a single character string.",
-                        ">" = "Current value is {.val {x}} ({.type {class(x)}})."
-                    ),
-                    call = call
-                )
-            }
-        }
-    )
-    switch(
-        option,
-        "SigBridgeR.verbose" = checker$scalar_logical(value),
-        "SigBridgeR.timeout" = ,
-        "SigBridgeR.seed" = checker$scalar_integer(value),
-        cli::cli_abort('Unknown option: {.var {option}}')
-    )
+  )
+  switch(
+    option,
+    "SigBridgeR.verbose" = checker$scalar_logical(value),
+    "SigBridgeR.timeout" = ,
+    "SigBridgeR.seed" = checker$scalar_integer(value),
+    cli::cli_abort('Unknown option: {.var {option}}')
+  )
 
-    invisible()
+  invisible()
 }

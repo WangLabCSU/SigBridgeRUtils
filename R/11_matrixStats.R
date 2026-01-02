@@ -22,13 +22,13 @@ NULL
 #'
 #'
 #' @export
-rowMeans3 <- function(x, na.rm = FALSE, ...) {
+ rowMeans3 <- function(x, na.rm = FALSE, ...) {
   if (rlang::is_installed('sparseMatrixStats') && inherits(x, 'sparseMatrix')) {
-    return(getExportedValue('sparseMatrixStats', 'rowMeans2'))(
+    return(getExportedValue('sparseMatrixStats', 'rowMeans2')(
       x = x,
       na.rm = na.rm,
       ...
-    )
+    ))
   }
   if (rlang::is_installed("matrixStats") && !isS4(x)) {
     return(getExportedValue("matrixStats", "rowMeans2")(
@@ -38,11 +38,11 @@ rowMeans3 <- function(x, na.rm = FALSE, ...) {
     ))
   }
   if (rlang::is_installed("Matrix") && inherits(x, "denseMatrix")) {
-    return(getExportedValue("Matrix", "rowMeans"))(
+    return(getExportedValue("Matrix", "rowMeans")(
       x = x,
       na.rm = na.rm,
       ...
-    )
+    ))
   }
   if (is.vector(x)) {
     cli::cli_warn("x is a vector, use fallback and return a single value")
@@ -68,11 +68,11 @@ rowMeans3 <- function(x, na.rm = FALSE, ...) {
 #' @export
 colMeans3 <- function(x, na.rm = FALSE, ...) {
   if (rlang::is_installed('sparseMatrixStats') && inherits(x, 'sparseMatrix')) {
-    return(getExportedValue('sparseMatrixStats', 'colMeans2'))(
+    return(getExportedValue('sparseMatrixStats', 'colMeans2')(
       x = x,
       na.rm = na.rm,
       ...
-    )
+    ))
   }
   if (rlang::is_installed("matrixStats") && !isS4(x)) {
     return(getExportedValue("matrixStats", "colMeans2")(
@@ -82,11 +82,11 @@ colMeans3 <- function(x, na.rm = FALSE, ...) {
     ))
   }
   if (rlang::is_installed("Matrix") && inherits(x, "denseMatrix")) {
-    return(getExportedValue("Matrix", "colMeans"))(
+    return(getExportedValue("Matrix", "colMeans")(
       x = x,
       na.rm = na.rm,
       ...
-    )
+    ))
   }
   if (is.vector(x)) {
     cli::cli_warn("x is a vector, use fallback and return a single value")
@@ -121,13 +121,15 @@ colMeans3 <- function(x, na.rm = FALSE, ...) {
 #' @seealso [matrixStats::rowVars()] for the underlying implementation
 #' @export
 rowVars3 <- function(x, na.rm = FALSE, ...) {
+  # sparseMatrix
   if (rlang::is_installed('sparseMatrixStats') && inherits(x, 'sparseMatrix')) {
-    return(getExportedValue('sparseMatrixStats', 'rowVars'))(
+    return(getExportedValue('sparseMatrixStats', 'rowVars')(
       x = x,
       na.rm = na.rm,
       ...
-    )
+    ))
   }
+  # base matrix
   if (rlang::is_installed("matrixStats") && !isS4(x)) {
     return(getExportedValue("matrixStats", "rowVars")(
       x = x,
@@ -136,6 +138,7 @@ rowVars3 <- function(x, na.rm = FALSE, ...) {
     ))
   }
 
+  # DenseMatrix & vector
   if (na.rm) {
     n <- rowSums3(!is.na(x))
     rowSums3((x - rowMeans3(x, na.rm = TRUE))^2, na.rm = TRUE) / (n - 1)
@@ -162,11 +165,11 @@ rowVars3 <- function(x, na.rm = FALSE, ...) {
 #' @export
 colVars3 <- function(x, na.rm = FALSE, ...) {
   if (rlang::is_installed('sparseMatrixStats') && inherits(x, 'sparseMatrix')) {
-    return(getExportedValue('sparseMatrixStats', 'colVars'))(
+    return(getExportedValue('sparseMatrixStats', 'colVars')(
       x = x,
       na.rm = na.rm,
       ...
-    )
+    ))
   }
   if (rlang::is_installed("matrixStats") && !isS4(x)) {
     return(getExportedValue("matrixStats", "colVars")(
