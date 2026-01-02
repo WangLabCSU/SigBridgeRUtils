@@ -5,6 +5,7 @@
 #' @param use missing value handling: "everything" (default) or "na.or.complete"
 #' @param center logical: center columns (default TRUE)
 #'
+#' @export
 #' @return p x q matrix of correlations
 cor2 <- function(
   X,
