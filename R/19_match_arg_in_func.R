@@ -48,46 +48,46 @@
 #' @export
 #'
 MatchArg <- function(
-    arg,
-    choices,
-    default = choices[1],
-    call = rlang::caller_env(),
-    ...
+  arg,
+  choices,
+  default = choices[1],
+  call = rlang::caller_env(),
+  ...
 ) {
-    if (length(choices) == 0) {
-        cli::cli_abort(
-            c(
-                "x" = "No choices provided.",
-                "i" = "Choices must be a non-empty character vector."
-            ),
-            class = "MatchArgError"
-        )
-    }
-    if (is.null(arg)) {
-        return(default)
-    }
-    if (length(arg) == 1L) {
-        # Exact match
-        idx <- match(arg, choices, nomatch = 0L)
-        if (idx > 0L) {
-            return(choices[idx])
-        }
-        # Patial match
-        idx <- pmatch(arg, choices, nomatch = 0L, duplicates.ok = FALSE)
-        if (idx > 0L) {
-            return(choices[idx])
-        }
-    }
-
-    if (!is.null(default)) {
-        return(default)
-    }
+  if (length(choices) == 0) {
     cli::cli_abort(
-        c(
-            "x" = "{.val {arg}} is not a valid choice for {.arg {deparse(substitute(arg))}}.",
-            "i" = "Must be one of: {.val {choices}}."
-        ),
-        class = "MatchArgError",
-        call = call
+      c(
+        "x" = "No choices provided.",
+        "i" = "Choices must be a non-empty character vector."
+      ),
+      class = "MatchArgError"
     )
+  }
+  if (is.null(arg)) {
+    return(default)
+  }
+  if (length(arg) == 1L) {
+    # Exact match
+    idx <- match(arg, choices, nomatch = 0L)
+    if (idx > 0L) {
+      return(choices[idx])
+    }
+    # Patial match
+    idx <- pmatch(arg, choices, nomatch = 0L, duplicates.ok = FALSE)
+    if (idx > 0L) {
+      return(choices[idx])
+    }
+  }
+
+  if (!is.null(default)) {
+    return(default)
+  }
+  cli::cli_abort(
+    c(
+      "x" = "{.val {arg}} is not a valid choice for {.arg {deparse(substitute(arg))}}.",
+      "i" = "Must be one of: {.val {choices}}."
+    ),
+    class = "MatchArgError",
+    call = call
+  )
 }
