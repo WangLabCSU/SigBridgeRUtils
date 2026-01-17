@@ -178,23 +178,7 @@ ListPyEnv.conda <- function(
       env_names <- env_matrix[, 1]
       env_paths <- env_matrix[, 2]
 
-      GetPythonPath <- function(path) { # nolint
-        if (is.na(path)) {
-          return(NA_character_)
-        }
-        candidates <- if (.Platform$OS.type == "windows") {
-          c("python.exe", "Scripts/python.exe")
-        } else {
-          c("bin/python", "bin/python3")
-        }
-        for (candidate in candidates) {
-          full_path <- file.path(path, candidate)
-          if (file.exists(full_path)) {
-            return(normalizePath(full_path, mustWork = FALSE))
-          }
-        }
-        NA_character_
-      }
+
       python_paths <- vapply(env_paths, GetPythonPath, character(1))
 
       conda_result <- data.frame(

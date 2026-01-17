@@ -330,7 +330,7 @@ SetupPyEnv.conda <- function(
 
         safely_py_install <- purrr::safely(reticulate::py_install)
 
-        install_res <- reticulate::py_install(
+        install_res <- safely_py_install(
           packages = packages_to_install_reticulate,
           envname = env_name,
           method = "auto",
@@ -339,8 +339,9 @@ SetupPyEnv.conda <- function(
         )
         if (!is.null(install_res$error)) {
           cli::cli_abort(c(
-            "x" = "Failed to install packages in conda environment {.val {env_name}} via `reticulate`",
-            ">" = install_res$error
+            "x" = "Failed to install packages in conda environment {.val {env_name}} \\
+                   via `reticulate`",
+            ">" = "{install_res$error}"
           ))
         }
       },
