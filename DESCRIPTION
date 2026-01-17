@@ -15,7 +15,10 @@ Suggests:
     matrixStats,
     preprocessCore
 Imports: 
+    chk,
     cli,
     data.table,
+    processx,
     purrr,
+    reticulate,
     rlang
