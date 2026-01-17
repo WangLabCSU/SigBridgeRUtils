@@ -9,6 +9,8 @@
 #' @param choices A character vector of valid choices to match against.
 #' @param default The default value to return if no match is found and `arg` is `NULL`.
 #'                Defaults to the first element of `choices`.
+#' @param call caller env
+#' @param ... No usage
 #'
 #' @return Returns the matched choice from the `choices` vector. If no match is found
 #'         and `arg` is `NULL`, returns the `default` value. If no match is found and
@@ -48,8 +50,19 @@
 MatchArg <- function(
     arg,
     choices,
-    default = choices[1]
+    default = choices[1],
+    call = rlang::caller_env(),
+    ...
 ) {
+    if (length(choices) == 0) {
+        cli::cli_abort(
+            c(
+                "x" = "No choices provided.",
+                "i" = "Choices must be a non-empty character vector."
+            ),
+            class = "MatchArgError"
+        )
+    }
     if (is.null(arg)) {
         return(default)
     }
@@ -71,9 +84,10 @@ MatchArg <- function(
     }
     cli::cli_abort(
         c(
-            "x" = "{.val {arg}} is not a valid choice.",
+            "x" = "{.val {arg}} is not a valid choice for {.arg {deparse(substitute(arg))}}.",
             "i" = "Must be one of: {.val {choices}}."
         ),
-        class = "MatchArgError"
+        class = "MatchArgError",
+        call = call
     )
 }

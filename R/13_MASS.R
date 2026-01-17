@@ -28,19 +28,19 @@
 #' @export
 #'
 ginv2 <- function(X, tol = sqrt(.Machine$double.eps), ...) {
-    # if (inherits(X, "sparseMatrix")) {
-    #     return(ginv2.sparseMatrix(X, tol = tol, ...))
-    # }
+  # if (inherits(X, "sparseMatrix")) {
+  #     return(ginv2.sparseMatrix(X, tol = tol, ...))
+  # }
 
-    if (inherits(X, "Matrix")) {
-        return(Matrix::Matrix(ginv2.default(X, tol = tol, ...)))
-    }
+  if (inherits(X, "Matrix")) {
+    return(Matrix::Matrix(ginv2.default(X, tol = tol, ...)))
+  }
 
-    # Base R matrix or coercible to matrix
-    if (length(dim(X)) > 2L || !(is.numeric(X) || is.complex(X))) {
-        cli::cli_abort(c("x" = "'X' must be a numeric or complex matrix"))
-    }
-    UseMethod("ginv2")
+  # Base R matrix or coercible to matrix
+  if (length(dim(X)) > 2L || !(is.numeric(X) || is.complex(X))) {
+    cli::cli_abort(c("x" = "'X' must be a numeric or complex matrix"))
+  }
+  UseMethod("ginv2")
 }
 
 
@@ -49,27 +49,31 @@ ginv2 <- function(X, tol = sqrt(.Machine$double.eps), ...) {
 #' @rdname ginv2
 #' @export
 ginv2.default <- function(X, tol = sqrt(.Machine$double.eps), ...) {
-    if (!is.matrix(X)) {
-        X <- as.matrix(X)
-    }
+  if (!is.matrix(X)) {
+    X <- as.matrix(X)
+  }
 
-    Xsvd <- svd(X)
+  Xsvd <- svd(X)
+  d <- Xsvd$d
+  u <- Xsvd$u
+  v <- Xsvd$v
 
-    if (is.complex(X)) {
-        Xsvd$u <- Conj(Xsvd$u)
-    }
+  if (is.complex(X)) {
+    u <- Conj(u)
+  }
 
-    Positive <- Xsvd$d > max(tol * Xsvd$d[1L], 0)
+  Positive <- d > max(tol * d[1L], 0)
 
-    if (all(Positive)) {
-        Xsvd$v %*% (1 / Xsvd$d * t(Xsvd$u))
-    } else if (!any(Positive)) {
-        array(0, dim(X)[c(2L, 1L)])
-    } else {
-        Xsvd$v[, Positive, drop = FALSE] %*%
-            ((1 / Xsvd$d[Positive]) *
-                t(Xsvd$u[, Positive, drop = FALSE]))
-    }
+  if (!any(Positive)) {
+    return(array(0, dim(X)[c(2L, 1L)]))
+  }
+
+  if (all(Positive)) {
+    v %*% (1 / d * t(u))
+  } else {
+    v[, Positive, drop = FALSE] %*%
+      ((1 / d[Positive]) * t(u[, Positive, drop = FALSE]))
+  }
 }
 
 # #' @title Generalized Inverse for Sparse Matrix Objects

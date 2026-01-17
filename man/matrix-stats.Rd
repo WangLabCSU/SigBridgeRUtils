@@ -2,34 +2,85 @@
 % Please edit documentation in R/11_matrixStats.R, R/14_preprocessCore.R
 \name{matrix-stats}
 \alias{matrix-stats}
-\alias{rowVars}
-\alias{colVars}
-\alias{rowSds}
-\alias{colSds}
-\alias{colQuantiles}
+\alias{rowMeans3}
+\alias{colMeans3}
+\alias{rowVars3}
+\alias{colVars3}
+\alias{rowSds3}
+\alias{colSds3}
+\alias{colQuantiles3}
+\alias{rowMaxs3}
+\alias{colSums3}
+\alias{rowSums3}
+\alias{rowMedians3}
+\alias{colMedians3}
 \alias{normalize.quantiles}
 \title{Matrix Statistics Functions (Not Necessarily)}
 \usage{
-rowVars(x, na.rm = FALSE, ...)
+rowMeans3(x, na.rm = FALSE, ...)
 
-colVars(x, na.rm = FALSE, ...)
+colMeans3(x, na.rm = FALSE, ...)
 
-rowSds(x, na.rm = FALSE, ...)
+rowVars3(x, na.rm = FALSE, ...)
 
-colSds(x, na.rm = FALSE, ...)
+colVars3(x, na.rm = FALSE, ...)
 
-colQuantiles(x, probs = seq(0, 1, 0.25), ...)
+rowSds3(x, na.rm = FALSE, ...)
+
+colSds3(x, na.rm = FALSE, ...)
+
+colQuantiles3(x, probs = seq(0, 1, 0.25), ...)
+
+rowMaxs3(
+  x,
+  rows = NULL,
+  cols = NULL,
+  na.rm = FALSE,
+  dim. = dim(x),
+  ...,
+  useNames = TRUE
+)
+
+colSums3(x, na.rm = FALSE, ...)
+
+rowSums3(x, na.rm = FALSE, ...)
+
+rowMedians3(
+  x,
+  rows = NULL,
+  cols = NULL,
+  na.rm = FALSE,
+  dim. = dim(x),
+  ...,
+  useNames = TRUE
+)
+
+colMedians3(
+  x,
+  rows = NULL,
+  cols = NULL,
+  na.rm = FALSE,
+  dim. = dim(x),
+  ...,
+  useNames = TRUE
+)
 
 normalize.quantiles(x, copy = TRUE, keep.names = FALSE, ...)
 }
 \arguments{
 \item{x}{A numeric matrix where columns represent samples and rows represent features.}
 
-\item{na.rm}{Logical indicating whether to remove missing values.}
+\item{na.rm}{Logical indicating whether to remove missing values}
 
 \item{...}{Additional arguments (currently not used).}
 
 \item{probs}{Numeric vector of probabilities with values between 0 and 1.}
+
+\item{rows, cols}{Indices specifying subset of rows/columns to operate over}
+
+\item{dim.}{Dimensions of the input matrix}
+
+\item{useNames}{Logical indicating whether to preserve row names in output}
 
 \item{copy}{Logical indicating whether to work on a copy of the matrix (TRUE)
 or modify in-place (FALSE).}
@@ -37,6 +88,10 @@ or modify in-place (FALSE).}
 \item{keep.names}{Logical indicating whether to preserve row and column names.}
 }
 \value{
+A numeric vector of length nrow(x) containing row variances.
+
+A numeric vector of length nrow(x) containing row variances.
+
 A numeric vector of length nrow(x) containing row variances.
 
 A numeric vector of length ncol(x) containing column variances.
@@ -47,27 +102,27 @@ A numeric vector of length ncol(x) containing column standard deviations.
 
 A matrix of quantiles with length(probs) rows and ncol(x) columns.
 
+A numeric vector of length nrow(x) containing row maximums
+
+A numeric vector of length \code{ncol(x)} containing column sums.
+
+A numeric vector of length \code{nrow(x)} containing row sums.
+
+A numeric vector of length \code{nrow(x)} containing row sums.
+
+A numeric vector of length \code{nrow(x)} containing row sums.
+
 A numeric matrix of the same dimensions as x with quantile-normalized data.
 }
 \description{
 A collection of functions for computing matrix statistics with fallback
-implementations when specialized packages are not available. These functions
-provide efficient row-wise and column-wise computations for large matrices.
-
-rowVars computes the variance for each row of a numeric matrix.
-Uses matrixStats::rowVars if available, otherwise provides a base R implementation.
-
-colVars computes the variance for each column of a numeric matrix.
-Uses matrixStats::colVars if available, otherwise provides a base R implementation.
-
-rowSds computes the standard deviation for each row of a numeric matrix.
-Uses matrixStats::rowSds if available, otherwise computes as the square root of row variances.
-
-colSds computes the standard deviation for each column of a numeric matrix.
-Uses matrixStats::colSds if available, otherwise computes as the square root of column variances.
-
-colQuantiles computes quantiles for each column of a numeric matrix.
-Uses matrixStats::colQuantiles if available, otherwise uses base R quantile function.
+implementations when specialized packages are not available.
+\itemize{
+\item sparseMatrixStats -> sparseMatrix
+\item matrixStats -> matrix
+\item Matrix -> denseMatrix
+\item base R -> matrix
+}
 
 normalize.quantiles performs quantile normalization on a matrix, transforming
 the distributions of each column to match a common target distribution.
@@ -78,34 +133,43 @@ a pure R implementation.
 mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
 
 # Compute row variances
-row_vars <- rowVars(mat)
+row_vars <- rowVars3(mat)
 
 # With missing values
 mat[1, 1] <- NA
-row_vars_na <- rowVars(mat, na.rm = TRUE)
+row_vars_na <- rowVars3(mat, na.rm = TRUE)
 
 mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
 
 # Compute column variances
-col_vars <- colVars(mat)
+col_vars <- colVars3(mat)
 
 # With missing values
 mat[1, 1] <- NA
-col_vars_na <- colVars(mat, na.rm = TRUE)
+col_vars_na <- colVars3(mat, na.rm = TRUE)
 
 mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
-row_sds <- rowSds(mat)
+row_sds <- rowSds3(mat)
 
 mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
-col_sds <- colSds(mat)
+col_sds <- colSds3(mat)
 
 mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
 
 # Compute quartiles for each column
-quartiles <- colQuantiles(mat)
+quartiles <- colQuantiles3(mat)
 
 # Compute specific quantiles
-specific_quantiles <- colQuantiles(mat, probs = c(0.1, 0.5, 0.9))
+specific_quantiles <- colQuantiles3(mat, probs = c(0.1, 0.5, 0.9))
+
+mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
+
+# Compute row maximums
+row_maxs <- rowMaxs3(mat)
+
+# With missing values
+mat[1, 1] <- NA
+row_maxs_na <- rowMaxs3(mat, na.rm = TRUE)
 
 mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
 
@@ -121,13 +185,7 @@ normalized_with_names <- normalize.quantiles(mat, keep.names = TRUE)
 \seealso{
 \code{\link[matrixStats:rowVars]{matrixStats::rowVars()}} for the underlying implementation
 
-\code{\link[matrixStats:rowVars]{matrixStats::colVars()}} for the underlying implementation
-
-\code{\link[matrixStats:rowSds]{matrixStats::rowSds()}} for the underlying implementation
-
 \code{\link[matrixStats:rowSds]{matrixStats::colSds()}} for the underlying implementation
-
-\code{\link[matrixStats:rowQuantiles]{matrixStats::colQuantiles()}} for the underlying implementation
 
 \code{\link[preprocessCore:normalize.quantiles]{preprocessCore::normalize.quantiles()}} for the underlying implementation
 }
