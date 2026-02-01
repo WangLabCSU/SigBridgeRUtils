@@ -22,9 +22,9 @@ NULL
 #'
 #'
 #' @export
- rowMeans3 <- function(x, na.rm = FALSE, ...) {
-  if (rlang::is_installed('sparseMatrixStats') && inherits(x, 'sparseMatrix')) {
-    return(getExportedValue('sparseMatrixStats', 'rowMeans2')(
+rowMeans3 <- function(x, na.rm = FALSE, ...) {
+  if (rlang::is_installed("sparseMatrixStats") && inherits(x, "sparseMatrix")) {
+    return(getExportedValue("sparseMatrixStats", "rowMeans2")(
       x = x,
       na.rm = na.rm,
       ...
@@ -51,6 +51,7 @@ NULL
       na.rm = na.rm,
       ...
     ))
+
   }
   rowMeans(x, na.rm = na.rm, ...)
 }
@@ -67,8 +68,8 @@ NULL
 #'
 #' @export
 colMeans3 <- function(x, na.rm = FALSE, ...) {
-  if (rlang::is_installed('sparseMatrixStats') && inherits(x, 'sparseMatrix')) {
-    return(getExportedValue('sparseMatrixStats', 'colMeans2')(
+  if (rlang::is_installed("sparseMatrixStats") && inherits(x, "sparseMatrix")) {
+    return(getExportedValue("sparseMatrixStats", "colMeans2")(
       x = x,
       na.rm = na.rm,
       ...
@@ -122,8 +123,8 @@ colMeans3 <- function(x, na.rm = FALSE, ...) {
 #' @export
 rowVars3 <- function(x, na.rm = FALSE, ...) {
   # sparseMatrix
-  if (rlang::is_installed('sparseMatrixStats') && inherits(x, 'sparseMatrix')) {
-    return(getExportedValue('sparseMatrixStats', 'rowVars')(
+  if (rlang::is_installed("sparseMatrixStats") && inherits(x, "sparseMatrix")) {
+    return(getExportedValue("sparseMatrixStats", "rowVars")(
       x = x,
       na.rm = na.rm,
       ...
@@ -164,8 +165,8 @@ rowVars3 <- function(x, na.rm = FALSE, ...) {
 #'
 #' @export
 colVars3 <- function(x, na.rm = FALSE, ...) {
-  if (rlang::is_installed('sparseMatrixStats') && inherits(x, 'sparseMatrix')) {
-    return(getExportedValue('sparseMatrixStats', 'colVars')(
+  if (rlang::is_installed("sparseMatrixStats") && inherits(x, "sparseMatrix")) {
+    return(getExportedValue("sparseMatrixStats", "colVars")(
       x = x,
       na.rm = na.rm,
       ...
@@ -198,7 +199,7 @@ colVars3 <- function(x, na.rm = FALSE, ...) {
 #'
 #' @export
 rowSds3 <- function(x, na.rm = FALSE, ...) {
-  if (rlang::is_installed("sparseMatrixStats") && inherits(x, 'sparseMatrix')) {
+  if (rlang::is_installed("sparseMatrixStats") && inherits(x, "sparseMatrix")) {
     return(getExportedValue("sparseMatrixStats", "rowSds")(
       x = x,
       na.rm = na.rm,
@@ -225,8 +226,8 @@ rowSds3 <- function(x, na.rm = FALSE, ...) {
 #' @seealso [matrixStats::colSds()] for the underlying implementation
 #' @export
 colSds3 <- function(x, na.rm = FALSE, ...) {
-  if (rlang::is_installed('sparseMatrixStats') && inherits(x, 'sparseMatrix')) {
-    return(getExportedValue('sparseMatrixStats', 'colSds')(
+  if (rlang::is_installed("sparseMatrixStats") && inherits(x, "sparseMatrix")) {
+    return(getExportedValue("sparseMatrixStats", "colSds")(
       x = x,
       na.rm = na.rm,
       ...
@@ -260,8 +261,8 @@ colSds3 <- function(x, na.rm = FALSE, ...) {
 #'
 #' @export
 colQuantiles3 <- function(x, probs = seq(0, 1, 0.25), ...) {
-  if (rlang::is_installed('sparseMatrixStats') && inherits(x, 'sparseMatrix')) {
-    return(getExportedValue('sparseMatrixStats', 'colQuantiles')(
+  if (rlang::is_installed("sparseMatrixStats") && inherits(x, "sparseMatrix")) {
+    return(getExportedValue("sparseMatrixStats", "colQuantiles")(
       x = x,
       probs = probs,
       ...
@@ -309,7 +310,7 @@ rowMaxs3 <- function(
   ...,
   useNames = TRUE
 ) {
-  if (rlang::is_installed('sparseMatrixStats') && inherits(x, 'sparseMatrix')) {
+  if (rlang::is_installed("sparseMatrixStats") && inherits(x, "sparseMatrix")) {
     return(getExportedValue("sparseMatrixStats", "rowMaxs")(
       x = x,
       rows = rows,

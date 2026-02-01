@@ -1,6 +1,6 @@
 Package: SigBridgeRUtils
 Title: Some Utilities & Base Supports for SigBridgeR
-Version: 0.2.2
+Version: 0.2.3
 Authors@R: 
     person("Yuxi", "Yang", email = "15364051195@163.com", role = c("cre", "aut"),  comment = c(ORCID = "0009-0006-1329-1224"))
 Description: Provides fundamental function support for SigBridgeR and its single-cell phenotypic screening algorithm, including optional functions.
@@ -22,9 +22,12 @@ Suggests:
     sparseMatrixStats,
     testthat
 Imports: 
+    chk,
     cli,
     data.table,
+    processx,
     purrr,
+    reticulate,
     rlang
 Config/testthat/parallel: true
 Config/testthat/edition: 3
