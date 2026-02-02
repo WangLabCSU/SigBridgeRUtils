@@ -18,14 +18,14 @@
 #' @family TimeStamp
 #'
 TimeStamp <- function() {
-    safely_time <- purrr::safely(Sys.time)
-    time_res <- safely_time()
-    time <- if (!is.null(time_res$error)) {
-        as.POSIXct("1970/01/01 00:00:00", tz = "UTC")
-    } else {
-        time_res$result
-    }
-    format(time, "%Y/%m/%d %H:%M:%S")
+  safely_time <- purrr::safely(Sys.time)
+  time_res <- safely_time()
+  time <- if (!is.null(time_res$error)) {
+    as.POSIXct("1970/01/01 00:00:00", tz = "UTC")
+  } else {
+    time_res$result
+  }
+  format(time, "%Y/%m/%d %H:%M:%S")
 }
 
 #' @title A Decorator for Adding Timestamp to CLI Functions
@@ -62,19 +62,19 @@ TimeStamp <- function() {
 #' @family TimeStamp
 #'
 AddTimeStamp2cli <- function(cli_func) {
-    force(cli_func)
+  force(cli_func)
 
-    function(...) {
-        messages <- list(...)
+  function(...) {
+    messages <- list(...)
 
-        if (length(messages) > 0) {
-            if (is.character(messages[[1]])) {
-                messages[[1]] <- paste0("[{TimeStamp()}] ", messages[[1]])
-            }
-        }
-
-        do.call(cli_func, messages)
+    if (length(messages) > 0) {
+      if (is.character(messages[[1]])) {
+        messages[[1]] <- paste0("[{TimeStamp()}] ", messages[[1]])
+      }
     }
+
+    do.call(cli_func, messages)
+  }
 }
 
 #' @title Create Environment with Timestamped CLI Functions
@@ -121,39 +121,39 @@ AddTimeStamp2cli <- function(cli_func) {
 #' @family TimeStamp
 #'
 CreateTimeStampCliEnv <- function(
-    cli_functions = c(
-        "cli_alert_info",
-        "cli_alert_success",
-        "cli_alert_warning",
-        "cli_alert_danger"
-    )
+  cli_functions = c(
+    "cli_alert_info",
+    "cli_alert_success",
+    "cli_alert_warning",
+    "cli_alert_danger"
+  )
 ) {
-    cli_env <- new.env()
+  cli_env <- new.env()
 
-    purrr::walk(cli_functions, function(func_name) {
-        if (exists(func_name, envir = asNamespace("cli"))) {
-            orig_func <- get(func_name, envir = asNamespace("cli"))
+  purrr::walk(cli_functions, function(func_name) {
+    if (exists(func_name, envir = asNamespace("cli"))) {
+      orig_func <- get(func_name, envir = asNamespace("cli"))
 
-            new_func <- eval(substitute(
-                function(..., .envir = parent.frame()) {
-                    args <- list(...)
-                    if (length(args) > 0 && is.character(args[[1]])) {
-                        args[[1]] <- paste0(
-                            "[{.dim ",
-                            TimeStamp(),
-                            "}] ",
-                            args[[1]]
-                        )
-                    }
-                    args$.envir <- .envir
-                    do.call(ORIG_FUNC, args)
-                },
-                list(ORIG_FUNC = orig_func)
-            ))
+      new_func <- eval(substitute(
+        function(..., .envir = parent.frame()) {
+          args <- list(...)
+          if (length(args) > 0 && is.character(args[[1]])) {
+            args[[1]] <- paste0(
+              "[{.dim ",
+              TimeStamp(),
+              "}] ",
+              args[[1]]
+            )
+          }
+          args$.envir <- .envir
+          do.call(ORIG_FUNC, args)
+        },
+        list(ORIG_FUNC = orig_func)
+      ))
 
-            assign(func_name, new_func, envir = cli_env)
-        }
-    })
+      assign(func_name, new_func, envir = cli_env)
+    }
+  })
 
-    invisible(cli_env)
+  invisible(cli_env)
 }
