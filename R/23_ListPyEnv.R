@@ -87,7 +87,8 @@ ListPyEnv.default <- function(
     env_type,
     c("all", "conda", "venv", "virtualenv")
   )
-  switch(env_type,
+  switch(
+    env_type,
     "conda" = ListPyEnv.conda(
       timeout = timeout,
       verbose = verbose,
@@ -141,7 +142,8 @@ ListPyEnv.conda <- function(
       )
 
       if (process_result$status != 0) {
-        error_msg <- if (nzchar(process_result$stderr)) { # nolint
+        error_msg <- if (nzchar(process_result$stderr)) {
+          # nolint
           process_result$stderr
         } else {
           process_result$stdout
@@ -177,7 +179,6 @@ ListPyEnv.conda <- function(
       env_matrix <- do.call(rbind, env_lines)
       env_names <- env_matrix[, 1]
       env_paths <- env_matrix[, 2]
-
 
       python_paths <- vapply(env_paths, GetPythonPath, character(1))
 
@@ -290,12 +291,11 @@ ListPyEnv.venv <- function(
       ),
       type = "venv"
     ))
+  } else if (verbose) {
+    cli::cli_warn(
+      "No venv found in {.val {venv_locations}}, return empty virtual environment result"
+    )
   }
-
-  cli::cli_warn(
-    "No venv found in {.val {venv_locations}}, \\
-    return empty virtual environment result"
-  )
 
   data.frame(
     name = character(),
