@@ -140,8 +140,8 @@ AddMisc <- function(seurat_obj, ..., cover = TRUE) {
         local_matches <- local_added[local_match_idx]
 
         local_suffixes <- vapply(
-          local_matches,
-          function(k) {
+          X = local_matches,
+          FUN = function(k) {
             if (k == key) {
               return(0L)
             }
@@ -156,7 +156,7 @@ AddMisc <- function(seurat_obj, ..., cover = TRUE) {
             }
             return(-1L)
           },
-          integer(1L)
+          FUN.VALUE = integer(1L)
         )
 
         local_max <- max(
