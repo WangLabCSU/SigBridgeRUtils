@@ -103,7 +103,9 @@ ListPyEnv.default <- function(
         ...
       ),
       ListPyEnv.venv(
-        venv_locations = venv_locations
+        venv_locations = venv_locations,
+        verbose = verbose,
+        ...
       )
     ),
     cli::cli_abort(c(
