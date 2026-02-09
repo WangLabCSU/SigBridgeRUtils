@@ -4,88 +4,67 @@
 \alias{MatchFunc2Args}
 \title{Match Functions to Argument List}
 \usage{
-MatchFunc2Args(args_list, ..., name_only = FALSE)
+MatchFunc2Args(
+  args_list,
+  ...,
+  name_only = FALSE,
+  top_one_only = FALSE,
+  dots_enabled = FALSE
+)
 }
 \arguments{
-\item{args_list}{A named list of arguments to match against function signatures.
-Must have non-empty names for all elements when non-empty.}
+\item{args_list}{Named list of arguments to match. Must have non-empty names
+when non-empty.}
 
-\item{...}{Functions to test for compatibility with \code{args_list}}
+\item{...}{Functions to test for compatibility.}
 
 \item{name_only}{Logical. If \code{TRUE}, return character vector of function
-names/identifiers instead of function objects. Default is \code{FALSE}.}
+names/identifiers instead of function objects. Default: \code{FALSE}.}
+
+\item{top_one_only}{Logical. If \code{TRUE}, return only the single best-matching
+function (ranked by number of matched parameters and parameter position).
+Default: \code{FALSE}.}
+
+\item{dots_enabled}{Logical. If \code{TRUE}, enable loose matching: any function
+with a \code{...} parameter is considered compatible regardless of other
+parameter names. Default: \code{FALSE} (strict matching).}
 }
 \value{
 \itemize{
-\item When \code{name_only = FALSE}: A list of compatible function objects
-\item When \code{name_only = TRUE}: A character vector of function identifiers:
-\itemize{
-\item Named functions: their symbol name (e.g., \code{"mean"})
-\item Anonymous functions: \code{"anonymous_<position>"} where position
-is the 1-based index in the \code{...} arguments
-}
+\item \code{name_only = FALSE, top_one_only = FALSE}: List of compatible function objects
+\item \code{name_only = TRUE, top_one_only = FALSE}: Character vector of function identifiers
+(named functions retain their symbol name; anonymous functions become \code{"anonymous_<index>"})
+\item \code{top_one_only = TRUE}: Single function object or name (depending on \code{name_only})
 }
 }
 \description{
-MatchFunc2Args identifies which functions (provided via \code{...}) can
-accept all named arguments in \code{args_list}. A function is considered
-compatible if:
+Identifies functions compatible with a given set of named arguments. A function
+is considered compatible if:
 \itemize{
-\item It contains a \code{...} parameter (can accept any arguments), OR
-\item All names in \code{args_list} exist in the function's formal parameters
-}
-
-This is useful for dynamic dispatch scenarios where you need to select
-appropriate functions based on available parameters.
-}
-\details{
-\strong{Argument Validation:}
-\itemize{
-\item \code{args_list} must be a named list with non-empty names for all
-elements when non-empty. Unnamed lists will trigger an error.
-\item Non-function arguments in \code{...} are skipped with a warning.
-\item Primitive functions (e.g., \code{`+`}, \code{`[`)}) are handled specially:
-only match when \code{args_list} is empty (since their formal parameters
-cannot be introspected reliably).
-}
-
-\strong{Name Resolution Strategy for \code{name_only = TRUE}:}
-\itemize{
-\item Symbol arguments (e.g., \code{mean}) → return symbol name as string
-\item Anonymous functions (e.g., \code{function(x) x}) → \code{"anonymous_<index>"}
-\item Complex expressions → \code{"anonymous_<index>"}
+\item It has a \code{...} parameter (\strong{loose matching}), OR
+\item All argument names in \code{args_list} exist in its formal parameters
+(\strong{strict matching}, default behavior).
 }
 }
 \examples{
 \dontrun{
-# Example functions with different signatures
-func1 <- function(a, b, c = 10) a + b + c
-func2 <- function(x, y, ...) x * y
-func3 <- function(p, q) p - q
+f1 <- function(a, b) a + b
+f2 <- function(x, y, ...) x * y
+f3 <- function(p, q) p - q
 
-# Argument list to match
 args <- list(a = 1, b = 2)
 
-# Find compatible functions (returns function objects)
-MatchFunc2Args(args, func1, func2, func3)
-# Returns list containing func1 and func2 (func3 lacks 'a' and 'b')
+# Strict matching (default): returns f1 only
+MatchFunc2Args(args, f1, f2, f3)
 
-# Get only function names/identifiers
-MatchFunc2Args(args, func1, func2, func3, name_only = TRUE)
-# Returns c("func1", "func2")
+# Loose matching: returns f1 and f2 (both accept 'a' and 'b' via strict match or ...)
+MatchFunc2Args(args, f1, f2, f3, dots_enabled = TRUE)
 
-# Anonymous function example
-MatchFunc2Args(
-  list(x = 5, y = 3),
-  function(x, y) x + y,
-  mean,
-  name_only = TRUE
-)
-# Returns c("anonymous_1", "mean")
+# Return only function names
+MatchFunc2Args(args, f1, f2, name_only = TRUE)
+# Returns: c("f1", "f2") when dots_enabled=TRUE
 }
-
 }
 \seealso{
-\code{\link[=formals]{formals()}} for inspecting function signatures,
-\code{\link[=FilterArgs4Func]{FilterArgs4Func()}} for the inverse operation (filtering arguments for a function)
+\code{\link[=FilterArgs4Func]{FilterArgs4Func()}} for filtering arguments to a function.(Reverse of this function)
 }

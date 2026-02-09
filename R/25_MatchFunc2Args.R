@@ -1,84 +1,61 @@
 #' @title Match Functions to Argument List
 #' @description
-#' MatchFunc2Args identifies which functions (provided via \code{...}) can
-#' accept all named arguments in \code{args_list}. A function is considered
-#' compatible if:
+#' Identifies functions compatible with a given set of named arguments. A function
+#' is considered compatible if:
 #' \itemize{
-#'   \item It contains a \code{...} parameter (can accept any arguments), OR
-#'   \item All names in \code{args_list} exist in the function's formal parameters
+#'   \item It has a \code{...} parameter (\strong{loose matching}), OR
+#'   \item All argument names in \code{args_list} exist in its formal parameters
+#'         (\strong{strict matching}, default behavior).
 #' }
 #'
-#' This is useful for dynamic dispatch scenarios where you need to select
-#' appropriate functions based on available parameters.
-#'
-#' @param args_list A named list of arguments to match against function signatures.
-#'   Must have non-empty names for all elements when non-empty.
-#' @param ... Functions to test for compatibility with \code{args_list}
+#' @param args_list Named list of arguments to match. Must have non-empty names
+#'   when non-empty.
+#' @param ... Functions to test for compatibility.
 #' @param name_only Logical. If \code{TRUE}, return character vector of function
-#'   names/identifiers instead of function objects. Default is \code{FALSE}.
+#'   names/identifiers instead of function objects. Default: \code{FALSE}.
+#' @param top_one_only Logical. If \code{TRUE}, return only the single best-matching
+#'   function (ranked by number of matched parameters and parameter position).
+#'   Default: \code{FALSE}.
+#' @param dots_enabled Logical. If \code{TRUE}, enable loose matching: any function
+#'   with a \code{...} parameter is considered compatible regardless of other
+#'   parameter names. Default: \code{FALSE} (strict matching).
 #'
 #' @return
 #'   \itemize{
-#'     \item When \code{name_only = FALSE}: A list of compatible function objects
-#'     \item When \code{name_only = TRUE}: A character vector of function identifiers:
-#'       \itemize{
-#'         \item Named functions: their symbol name (e.g., \code{"mean"})
-#'         \item Anonymous functions: \code{"anonymous_<position>"} where position
-#'           is the 1-based index in the \code{...} arguments
-#'       }
+#'     \item \code{name_only = FALSE, top_one_only = FALSE}: List of compatible function objects
+#'     \item \code{name_only = TRUE, top_one_only = FALSE}: Character vector of function identifiers
+#'           (named functions retain their symbol name; anonymous functions become \code{"anonymous_<index>"})
+#'     \item \code{top_one_only = TRUE}: Single function object or name (depending on \code{name_only})
 #'   }
-#'
-#' @details
-#' \strong{Argument Validation:}
-#' \itemize{
-#'   \item \code{args_list} must be a named list with non-empty names for all
-#'     elements when non-empty. Unnamed lists will trigger an error.
-#'   \item Non-function arguments in \code{...} are skipped with a warning.
-#'   \item Primitive functions (e.g., \code{`+`}, \code{`[`)}) are handled specially:
-#'     only match when \code{args_list} is empty (since their formal parameters
-#'     cannot be introspected reliably).
-#' }
-#'
-#' \strong{Name Resolution Strategy for \code{name_only = TRUE}:}
-#' \itemize{
-#'   \item Symbol arguments (e.g., \code{mean}) → return symbol name as string
-#'   \item Anonymous functions (e.g., \code{function(x) x}) → \code{"anonymous_<index>"}
-#'   \item Complex expressions → \code{"anonymous_<index>"}
-#' }
 #'
 #' @examples
 #' \dontrun{
-#' # Example functions with different signatures
-#' func1 <- function(a, b, c = 10) a + b + c
-#' func2 <- function(x, y, ...) x * y
-#' func3 <- function(p, q) p - q
+#' f1 <- function(a, b) a + b
+#' f2 <- function(x, y, ...) x * y
+#' f3 <- function(p, q) p - q
 #'
-#' # Argument list to match
 #' args <- list(a = 1, b = 2)
 #'
-#' # Find compatible functions (returns function objects)
-#' MatchFunc2Args(args, func1, func2, func3)
-#' # Returns list containing func1 and func2 (func3 lacks 'a' and 'b')
+#' # Strict matching (default): returns f1 only
+#' MatchFunc2Args(args, f1, f2, f3)
 #'
-#' # Get only function names/identifiers
-#' MatchFunc2Args(args, func1, func2, func3, name_only = TRUE)
-#' # Returns c("func1", "func2")
+#' # Loose matching: returns f1 and f2 (both accept 'a' and 'b' via strict match or ...)
+#' MatchFunc2Args(args, f1, f2, f3, dots_enabled = TRUE)
 #'
-#' # Anonymous function example
-#' MatchFunc2Args(
-#'   list(x = 5, y = 3),
-#'   function(x, y) x + y,
-#'   mean,
-#'   name_only = TRUE
-#' )
-#' # Returns c("anonymous_1", "mean")
+#' # Return only function names
+#' MatchFunc2Args(args, f1, f2, name_only = TRUE)
+#' # Returns: c("f1", "f2") when dots_enabled=TRUE
 #' }
-#'
-#' @seealso
-#' [formals()] for inspecting function signatures,
-#' [FilterArgs4Func()] for the inverse operation (filtering arguments for a function)
 #' @export
-MatchFunc2Args <- function(args_list, ..., name_only = FALSE) {
+#' @importFrom data.table `%chin%` `:=`
+#' @seealso [FilterArgs4Func()] for filtering arguments to a function.(Reverse of this function)
+MatchFunc2Args <- function(
+  args_list,
+  ...,
+  name_only = FALSE,
+  top_one_only = FALSE,
+  dots_enabled = FALSE
+) {
   # Validate args_list has proper names when non-empty
   if (length(args_list) > 0) {
     if (is.null(names(args_list)) || any(names(args_list) == "")) {
@@ -97,8 +74,57 @@ MatchFunc2Args <- function(args_list, ..., name_only = FALSE) {
   }
 
   func_names <- names(rlang::enquos(..., .named = TRUE))
+  names(dots_funcs) <- func_names
   func_formals <- lapply(dots_funcs, formals)
+  names(func_formals) <- func_names
 
+  guess <- purrr::imap(
+    .x = func_formals,
+    .f = \(lst, func_name) {
+      # * This function contains a ... parameter, so it can accept any arguments
+      # * In this case, we find the position of arguments
+
+      has_dots <- "..." %chin% names(lst)
+
+      has_these_args <- names(lst) %chin% names(args_list)
+
+      positions <- which(has_these_args) #
+      count <- sum(has_these_args) # number of matched args
+
+      if (length(positions) == 0) {
+        # integre(0), not found
+        list(
+          func_name = func_name,
+          position_sum = 0,
+          arg_count = 0,
+          has_dots = has_dots
+        )
+      } else {
+        list(
+          func_name = func_name,
+          position_sum = sum(positions),
+          arg_count = count,
+          has_dots = has_dots
+        )
+      }
+    }
+  )
+
+  guess_dt <- data.table::rbindlist(guess)
+  data.table::setorder(guess_dt, -arg_count, position_sum, has_dots)
+  guess_dt <- guess_dt[arg_count > 0]
+
+  if (dots_enabled) {
+    # because dots can accrpt any args,
+    # so all funcs with `has_dots` are returned.
+    if (name_only) {
+      return(guess_dt$func_name[guess_dt$has_dots])
+    } else {
+      return(dots_funcs[guess_dt$func_name[guess_dt$has_dots]])
+    }
+  }
+
+  # handle without `has_dots`, which means strict matching
   logical_vec <- vapply(
     X = func_formals,
     FUN = \(lst) {
@@ -108,10 +134,33 @@ MatchFunc2Args <- function(args_list, ..., name_only = FALSE) {
     FUN.VALUE = logical(1L)
   )
 
-  if (name_only) {
-    return(func_names[logical_vec])
+  # filter out funcs that cannot exactly match all args
+  names(logical_vec) <- func_names
+  guess_dt[, exactly_matched := logical_vec[func_name]]
+  guess_dt <- guess_dt[guess_dt$exactly_matched]
+
+  # return one value
+  if (top_one_only) {
+    if (
+      all(
+        guess_dt[1, .(position_sum, arg_count)] ==
+          guess_dt[2, .(position_sum, arg_count)]
+      )
+    ) {
+      cli::cli_warn(
+        "Arguments provided is not enough to select a function, still return the first function but result may differ from expected"
+      )
+    }
+    if (name_only) {
+      return(guess_dt$func_name[1])
+    } else {
+      return(dots_funcs[[guess_dt$func_name[1]]])
+    }
   }
 
-  names(dots_funcs) <- func_names
-  dots_funcs[logical_vec]
+  if (name_only) {
+    return(guess_dt$func_name)
+  }
+
+  dots_funcs[guess_dt$func_name]
 }
