@@ -69,7 +69,16 @@ setFuncOption <- function(...) {
 #' getFuncOption("verbose")
 #'
 #' @export
-getFuncOption <- function(option, default = NULL) {
+getFuncOption <- function(option = NULL, default = NULL) {
+  if (is.null(option)) {
+    all_options <- options()
+    sigbridger_options <- all_options[startsWith(
+      names(all_options),
+      "SigBridgeR."
+    )]
+    return(sigbridger_options)
+  }
+
   if (!startsWith(option, "SigBridgeR.")) {
     option <- paste0("SigBridgeR.", option)
   }

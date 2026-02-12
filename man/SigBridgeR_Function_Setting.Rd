@@ -9,7 +9,7 @@
 \usage{
 setFuncOption(...)
 
-getFuncOption(option, default = NULL)
+getFuncOption(option = NULL, default = NULL)
 
 checkFuncOption(option, value, call = rlang::caller_env())
 }
