@@ -2,12 +2,14 @@ Package: SigBridgeRUtils
 Title: Some Utilities & Base Supports for SigBridgeR
 Version: 0.2.5
 Authors@R: 
-    person("Yuxi", "Yang", email = "15364051195@163.com", role = c("cre", "aut"),  comment = c(ORCID = "0009-0006-1329-1224"))
+    person("Yuxi", "Yang", email = "15364051195@163.com", role = c("cre","aut"),  comment = c(ORCID = "0009-0006-1329-1224"))
 Description: Provides fundamental function support for SigBridgeR and its single-cell phenotypic screening algorithm, including optional functions.
-License: GPL (>= 3)
+License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
+Depends: 
+    R (>= 4.1.0)
 Suggests: 
     furrr,
     future,
@@ -16,7 +18,6 @@ Suggests:
     matrixStats,
     microbenchmark,
     preprocessCore,
-    qs,
     Rfast,
     SeuratObject,
     sparseMatrixStats,
