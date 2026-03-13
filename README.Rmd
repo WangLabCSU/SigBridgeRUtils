@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 # SigBridgeRUtils
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN status](https://www.r-pkg.org/badges/version/SigBridgeRUtils)](https://CRAN.R-project.org/package=SigBridgeRUtils)
 <!-- badges: end -->
 
@@ -24,7 +24,13 @@ The goal of SigBridgeRUtils is to provide basic suppports for SigBridgeR and rel
 
 ## Installation
 
-You can install the development version of SigBridgeRUtils from [GitHub](https://github.com/) with:
+You can install SigBridgeRUtils with:
+
+```r
+install.packages("SigBridgeRUtils")
+```
+
+Or from GitHub:
 
 ``` r
 # install.packages("pak")

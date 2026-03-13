@@ -18,7 +18,6 @@
 #' inner_func(1, 2, 3, 4)  # Returns c("a", "...")
 #' }
 #'
-#' @keywords internal
 #' @export
 GetFuncArgs <- function(
   exclude = NULL,
