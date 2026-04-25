@@ -1,0 +1,38 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# SigBridgeRUtils
+
+<!-- badges: start -->
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![CRAN status](https://www.r-pkg.org/badges/version/SigBridgeRUtils)](https://CRAN.R-project.org/package=SigBridgeRUtils)
+<!-- badges: end -->
+
+The goal of SigBridgeRUtils is to provide basic suppports for SigBridgeR and relevant screening analysis development.
+
+## Installation
+
+You can install SigBridgeRUtils with:
+
+```r
+install.packages("SigBridgeRUtils")
+```
+
+Or from GitHub:
+
+``` r
+# install.packages("pak")
+pak::pak("WangLabCSU/SigBridgeRUtils")
+```

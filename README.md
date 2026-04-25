@@ -1,11 +1,24 @@
+<!-- badges: start -->
+
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable) [![CRAN status](https://www.r-pkg.org/badges/version/SigBridgeRUtils)](https://CRAN.R-project.org/package=SigBridgeRUtils)
+
+<!-- badges: end -->
+
 # SigBridgeRUtils
 
-Some utilities and base supports for SigBridgeR (3.x.x)
+The goal of SigBridgeRUtils is to provide basic suppports for SigBridgeR (3.x.x) and relevant screening analysis development.
 
-For bug report or feature request, please use [issue](https://github.com/SigBridgeR/issues) in [SigBridgeR](https://github.com/WangLabCSU/SigBridgeR).
+## Installation
 
-To install:
+You can install SigBridgeRUtils with:
 
-```R
-pak::pkg_install("WangLabCSU/SigBridgeRUtils")
+``` r
+install.packages("SigBridgeRUtils")
+```
+
+Or from GitHub:
+
+``` r
+# install.packages("pak")
+pak::pak("WangLabCSU/SigBridgeRUtils")
 ```

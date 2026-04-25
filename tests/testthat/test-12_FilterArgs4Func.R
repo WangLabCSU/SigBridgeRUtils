@@ -6,11 +6,11 @@ test_that("multiplication works", {
     ...
   ) {
     a * b * c
-    message(a, b, c,...)
+    message(a, b, c, ...)
   }
 
-  l<-list(a=10,b=20,x=30,y=40)
+  l <- list(a = 10, b = 20, x = 30, y = 40)
 
   l2 <- FilterArgs4Func(l, f)
-  expect_equal(l2, list(a=10,b=20))
+  expect_equal(l2, list(a = 10, b = 20))
 })
