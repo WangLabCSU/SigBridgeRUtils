@@ -185,7 +185,7 @@ normalized_with_names <- normalize.quantiles(mat, keep.names = TRUE)
 \seealso{
 \code{\link[matrixStats:rowVars]{matrixStats::rowVars()}} for the underlying implementation
 
-\code{\link[matrixStats:rowSds]{matrixStats::colSds()}} for the underlying implementation
+\code{\link[matrixStats:colSds]{matrixStats::colSds()}} for the underlying implementation
 
 \code{\link[preprocessCore:normalize.quantiles]{preprocessCore::normalize.quantiles()}} for the underlying implementation
 }

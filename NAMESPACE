@@ -42,6 +42,10 @@ export(rowSds3)
 export(rowSums3)
 export(rowVars3)
 export(setFuncOption)
-importFrom(data.table,`%chin%`)
-importFrom(data.table,`:=`)
+importFrom(Rcpp,evalCpp)
+importFrom(data.table,
+  "%chin%",
+  ":="
+)
 importFrom(purrr,walk)
+useDynLib(SigBridgeRUtils, .registration = TRUE)

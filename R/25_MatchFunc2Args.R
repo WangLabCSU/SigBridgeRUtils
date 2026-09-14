@@ -47,7 +47,7 @@
 #' # Returns: c("f1", "f2") when dots_enabled=TRUE
 #' }
 #' @export
-#' @importFrom data.table `%chin%` `:=`
+#' @importFrom data.table %chin% :=
 #' @seealso [FilterArgs4Func()] for filtering arguments to a function.(Reverse of this function)
 MatchFunc2Args <- function(
   args_list,

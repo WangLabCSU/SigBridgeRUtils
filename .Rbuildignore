@@ -5,3 +5,8 @@
 ^\.Rproj\.user$
 ^README\.Rmd$
 ^cran-comments\.md$
+
+
+# flir files
+^flir$
+^\.github$
