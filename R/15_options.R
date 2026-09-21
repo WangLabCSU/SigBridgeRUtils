@@ -34,7 +34,7 @@ NULL
 #' @export
 setFuncOption <- function(...) {
   opts <- list(...)
-  if (length(opts) > 0) {
+  if (length(opts) > 0L) {
     opt_names <- names(opts)
     needs_prefix <- !startsWith(opt_names, "SigBridgeR.")
     opt_names[needs_prefix] <- paste0(

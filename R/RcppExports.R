@@ -5,6 +5,14 @@ ginv_cpp <- function(initialized_matrix, tol = 1e-6) {
     .Call(`_SigBridgeRUtils_ginv_cpp`, initialized_matrix, tol)
 }
 
+matrix_summary_cpp <- function(initialized_matrix, statistic, by_row, na_rm = FALSE) {
+    .Call(`_SigBridgeRUtils_matrix_summary_cpp`, initialized_matrix, statistic, by_row, na_rm)
+}
+
+matrix_quantiles_cpp <- function(initialized_matrix, probabilities, na_rm = FALSE) {
+    .Call(`_SigBridgeRUtils_matrix_quantiles_cpp`, initialized_matrix, probabilities, na_rm)
+}
+
 normalize_quantiles_cpp <- function(initialized_matrix) {
     .Call(`_SigBridgeRUtils_normalize_quantiles_cpp`, initialized_matrix)
 }

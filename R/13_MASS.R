@@ -31,12 +31,12 @@ ginv2 <- function(X, tol = sqrt(.Machine$double.eps), ...) {
   if (inherits(X, "Matrix")) {
     return(Matrix::Matrix(ginv2_beachmat(X, tol = tol, ...)))
   }
-  if(inherits(dmat, "DelayedMatrix")){
+  if (inherits(X, "DelayedMatrix")) {
     rlang::check_installed("DelayedArray")
-    return(DelayedArray::DelayedArray(ginv2_beachmat(X, tol = tol, ...))
+    return(DelayedArray::DelayedArray(ginv2_beachmat(X, tol = tol, ...)))
   }
 
- ginv2_default(X, tol = tol, ...)
+  ginv2_beachmat(X, tol = tol, ...)
 }
 
 #' @rdname ginv2
@@ -58,6 +58,7 @@ ginv2_beachmat <- function(X, tol = sqrt(.Machine$double.eps), ...) {
 
 
 #' @rdname ginv2
+#' @export
 ginv2_default <- function(X, tol = sqrt(.Machine$double.eps), ...) {
   if (!is.matrix(X)) {
     X <- as.matrix(X)
@@ -72,16 +73,16 @@ ginv2_default <- function(X, tol = sqrt(.Machine$double.eps), ...) {
     u <- Conj(u)
   }
 
-  Positive <- d > max(tol * d[1L], 0)
+  Positive <- d > max(tol * d[1L], 0L)
 
   if (!any(Positive)) {
-    return(array(0, dim(X)[c(2L, 1L)]))
+    return(array(0L, dim(X)[c(2L, 1L)]))
   }
 
   if (all(Positive)) {
-    v %*% (1 / d * t(u))
+    v %*% (1L / d * t(u))
   } else {
     v[, Positive, drop = FALSE] %*%
-      ((1 / d[Positive]) * t(u[, Positive, drop = FALSE]))
+      ((1L / d[Positive]) * t(u[, Positive, drop = FALSE]))
   }
 }

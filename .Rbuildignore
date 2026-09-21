@@ -10,3 +10,5 @@
 # flir files
 ^flir$
 ^\.github$
+\.codebuddy$
+\.clangd$

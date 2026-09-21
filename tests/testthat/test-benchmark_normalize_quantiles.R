@@ -2,8 +2,8 @@ skip("Skip benchmark for normalize.quantiles()")
 skip_if_not_installed("ggplot2")
 skip_if_not_installed("microbenchmark")
 
-mat_10_10 <- matrix(runif(100), 10)
-mat_100_100 <- matrix(runif(10000), 100)
+mat_10_10 <- matrix(runif(100L), 10L)
+mat_100_100 <- matrix(runif(10000L), 100L)
 
 tolerant <- function(x, y) {
   max(abs(x - y))

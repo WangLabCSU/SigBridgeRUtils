@@ -3,9 +3,9 @@ skip_if_not_installed("ggplot2")
 skip_if_not_installed("microbenchmark")
 skip_if_not_installed("MASS")
 
-set.seed(123)
-mat_10_10 <- matrix(runif(100), 10)
-mat_100_100 <- matrix(runif(10000), 100)
+set.seed(123L)
+mat_10_10 <- matrix(runif(100L), 10L)
+mat_100_100 <- matrix(runif(10000L), 100L)
 
 tolerant <- function(x, y) {
   max(abs(x - y))
@@ -25,17 +25,17 @@ ginv2_v0.2.7 <- function(X, tol = sqrt(.Machine$double.eps), ...) {
     u <- Conj(u)
   }
 
-  Positive <- d > max(tol * d[1L], 0)
+  Positive <- d > max(tol * d[1L], 0L)
 
   if (!any(Positive)) {
-    return(array(0, dim(X)[c(2L, 1L)]))
+    return(array(0L, dim(X)[c(2L, 1L)]))
   }
 
   if (all(Positive)) {
-    v %*% (1 / d * t(u))
+    v %*% (1L / d * t(u))
   } else {
     v[, Positive, drop = FALSE] %*%
-      ((1 / d[Positive]) * t(u[, Positive, drop = FALSE]))
+      ((1L / d[Positive]) * t(u[, Positive, drop = FALSE]))
   }
 }
 

@@ -23,6 +23,33 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// matrix_summary_cpp
+NumericVector matrix_summary_cpp(SEXP initialized_matrix, std::string statistic, bool by_row, bool na_rm);
+RcppExport SEXP _SigBridgeRUtils_matrix_summary_cpp(SEXP initialized_matrixSEXP, SEXP statisticSEXP, SEXP by_rowSEXP, SEXP na_rmSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type initialized_matrix(initialized_matrixSEXP);
+    Rcpp::traits::input_parameter< std::string >::type statistic(statisticSEXP);
+    Rcpp::traits::input_parameter< bool >::type by_row(by_rowSEXP);
+    Rcpp::traits::input_parameter< bool >::type na_rm(na_rmSEXP);
+    rcpp_result_gen = Rcpp::wrap(matrix_summary_cpp(initialized_matrix, statistic, by_row, na_rm));
+    return rcpp_result_gen;
+END_RCPP
+}
+// matrix_quantiles_cpp
+NumericMatrix matrix_quantiles_cpp(SEXP initialized_matrix, NumericVector probabilities, bool na_rm);
+RcppExport SEXP _SigBridgeRUtils_matrix_quantiles_cpp(SEXP initialized_matrixSEXP, SEXP probabilitiesSEXP, SEXP na_rmSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type initialized_matrix(initialized_matrixSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type probabilities(probabilitiesSEXP);
+    Rcpp::traits::input_parameter< bool >::type na_rm(na_rmSEXP);
+    rcpp_result_gen = Rcpp::wrap(matrix_quantiles_cpp(initialized_matrix, probabilities, na_rm));
+    return rcpp_result_gen;
+END_RCPP
+}
 // normalize_quantiles_cpp
 NumericMatrix normalize_quantiles_cpp(SEXP initialized_matrix);
 RcppExport SEXP _SigBridgeRUtils_normalize_quantiles_cpp(SEXP initialized_matrixSEXP) {
@@ -37,6 +64,8 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_SigBridgeRUtils_ginv_cpp", (DL_FUNC) &_SigBridgeRUtils_ginv_cpp, 2},
+    {"_SigBridgeRUtils_matrix_summary_cpp", (DL_FUNC) &_SigBridgeRUtils_matrix_summary_cpp, 4},
+    {"_SigBridgeRUtils_matrix_quantiles_cpp", (DL_FUNC) &_SigBridgeRUtils_matrix_quantiles_cpp, 3},
     {"_SigBridgeRUtils_normalize_quantiles_cpp", (DL_FUNC) &_SigBridgeRUtils_normalize_quantiles_cpp, 1},
     {NULL, NULL, 0}
 };
