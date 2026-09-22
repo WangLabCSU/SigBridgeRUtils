@@ -254,7 +254,7 @@ test_that("matrix statistics support sparse and delayed matrices", {
     expect_equal(colVars3(x, na.rm = TRUE), apply(dense, 2L, var, na.rm = TRUE))
     expect_equal(
       rowMedians3(x, na.rm = TRUE),
-      apply(dense, 1L, median, na.rm = TRUE)
+      apply(x, 1L, stats::median, na.rm = TRUE)
     )
     expect_equal(
       colMedians3(x, na.rm = TRUE),

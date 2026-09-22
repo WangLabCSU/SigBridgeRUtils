@@ -2,6 +2,7 @@ CompileFlags:
   Add:
     - "-I/data/home/yyx/R/x86_64-pc-linux-gnu-library/4.5/Rcpp/include"
     - "-I/data/home/yyx/R/x86_64-pc-linux-gnu-library/4.5/RcppArmadillo/include"
+    - "-I/data/home/yyx/Project/SigBridgeR_methods/SigBridgeRUtils/inst/include/eigen"
     - "-I/data/home/yyx/R/x86_64-pc-linux-gnu-library/4.5/beachmat/include"
     - "-I/data/home/yyx/R/x86_64-pc-linux-gnu-library/4.5/assorthead/include"  
     - "-I/opt/R/4.5.1/lib/R/include"

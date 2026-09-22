@@ -17,11 +17,7 @@ test_that("it's faster?", {
       mat_10_10,
       copy = FALSE
     ),
-    Cpp = normalize_quantiles_cpp(beachmat::initializeCpp(mat_10_10)),
-    Cpp_threads2 = normalize_quantiles_cpp(
-      beachmat::initializeCpp(mat_10_10),
-      2L
-    )
+    Cpp = normalize_quantiles_cpp(beachmat::initializeCpp(mat_10_10))
   )
 
   stats_100 <- microbenchmark::microbenchmark(
@@ -30,11 +26,7 @@ test_that("it's faster?", {
       mat_100_100,
       copy = FALSE
     ),
-    Cpp = normalize_quantiles_cpp(beachmat::initializeCpp(mat_100_100)),
-    Cpp_threads2 = normalize_quantiles_cpp(
-      beachmat::initializeCpp(mat_100_100),
-      2L
-    )
+    Cpp = normalize_quantiles_cpp(beachmat::initializeCpp(mat_100_100))
   )
 
   ggplot2::autoplot(stats_10)

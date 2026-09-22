@@ -12,3 +12,6 @@
 ^\.github$
 \.codebuddy$
 \.clangd$
+\.clang-format$
+\AGENTS.md
+setting\.json$

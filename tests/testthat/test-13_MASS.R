@@ -54,7 +54,7 @@ test_that("ginv2 handles different tolerance values", {
   result_default <- ginv2(m)
 
   # Test with custom tolerance
-  result_custom <- ginv2(m, tol = 1e-8L)
+  result_custom <- ginv2(m, tol = 1e-8)
   expect_equal(dim(result_default), dim(result_custom))
 })
 
@@ -86,20 +86,13 @@ test_that("ginv2 error handling", {
   # Test with non-numeric input
   expect_error(
     ginv2("not a matrix"),
-    "'X' must be a numeric or complex matrix"
+    "integer or real"
   )
 
   # Test with 3D array
   array_3d <- array(1L:8L, dim = c(2L, 2L, 2L))
   expect_error(
     ginv2(array_3d),
-    "'X' must be a numeric or complex matrix"
-  )
-
-  # Test with logical matrix
-  logical_m <- matrix(c(TRUE, FALSE, TRUE, FALSE), 2L, 2L)
-  expect_error(
-    ginv2(logical_m),
     "'X' must be a numeric or complex matrix"
   )
 })

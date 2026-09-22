@@ -28,12 +28,34 @@
 #' @export
 #'
 ginv2 <- function(X, tol = sqrt(.Machine$double.eps), ...) {
-  if (inherits(X, "Matrix")) {
+  is_s4matrix <- inherits(X, "Matrix")
+  is_delayedmatrix <- inherits(X, "DelayedMatrix")
+  is_matrix <- is.matrix(X)
+  is_vector <- is.vector(X)
+
+  is_supported_matrix <- is_s4matrix ||
+    is_delayedmatrix ||
+    is_matrix ||
+    is_vector
+
+  if (length(dim(X)) > 2L || !is_supported_matrix) {
+    stop("'X' must be a numeric or complex matrix")
+  }
+
+  if (is_s4matrix) {
     return(Matrix::Matrix(ginv2_beachmat(X, tol = tol, ...)))
   }
-  if (inherits(X, "DelayedMatrix")) {
+  if (is_delayedmatrix) {
     rlang::check_installed("DelayedArray")
     return(DelayedArray::DelayedArray(ginv2_beachmat(X, tol = tol, ...)))
+  }
+
+  if (!is_matrix) {
+    X <- as.matrix(X)
+  }
+
+  if (is.complex(X)) {
+    return(ginv2_default(X, tol = tol, ...))
   }
 
   ginv2_beachmat(X, tol = tol, ...)
@@ -48,10 +70,10 @@ ginv2_beachmat <- function(X, tol = sqrt(.Machine$double.eps), ...) {
     tol
   )
 
-  dimnames(result) <- list(
-    colnames(X),
-    rownames(X)
-  )
+  dimnames_X <- dimnames(X)
+  if (!is.null(dimnames_X)) {
+    dimnames(result) <- rev(dimnames_X)
+  }
 
   result
 }
