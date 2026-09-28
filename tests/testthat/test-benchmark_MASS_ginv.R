@@ -1,4 +1,4 @@
-skip("Skip benchmark for ginv2_cpp()")
+skip_on_cran("Skip benchmark for ginv2_cpp()")
 skip_if_not_installed("ggplot2")
 skip_if_not_installed("microbenchmark")
 skip_if_not_installed("MASS")

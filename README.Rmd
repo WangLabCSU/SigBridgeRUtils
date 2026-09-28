@@ -1,5 +1,7 @@
 ---
-output: github_document
+output:
+  md_document:
+    variant: gfm
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -20,6 +22,7 @@ knitr::opts_chunk$set(
 [![CRAN-status](https://www.r-pkg.org/badges/version/SigBridgeRUtils)](https://CRAN.R-project.org/package=SigBridgeRUtils)
 [![Devel-Version](https://img.shields.io/badge/devel%20version-0.2.8-blue.svg)](https://github.com/WangLabCSU/SigBridgeRUtils)
 [![R-CMD-check](https://github.com/WangLabCSU/SigBridgeRUtils/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/WangLabCSU/SigBridgeRUtils/actions/workflows/R-CMD-check.yaml)
+[![Code-size](https://img.shields.io/github/languages/code-size/WangLabCSU/SigBridgeRUtils.svg)](https://github.com/WangLabCSU/SigBridgeRUtils)
 <!-- badges: end -->
 
 The goal of SigBridgeRUtils is to provide basic suppports for SigBridgeR and relevant screening analysis development.
@@ -32,7 +35,7 @@ You can install SigBridgeRUtils with:
 install.packages("SigBridgeRUtils")
 ```
 
-Or from GitHub:
+Or from GitHub with latest development version:
 
 ``` r
 # install.packages("pak")

@@ -61,12 +61,25 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// unpack_assign_cpp
+void unpack_assign_cpp(SEXP lhs, SEXP rhs, Environment env);
+RcppExport SEXP _SigBridgeRUtils_unpack_assign_cpp(SEXP lhsSEXP, SEXP rhsSEXP, SEXP envSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type lhs(lhsSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type rhs(rhsSEXP);
+    Rcpp::traits::input_parameter< Environment >::type env(envSEXP);
+    unpack_assign_cpp(lhs, rhs, env);
+    return R_NilValue;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_SigBridgeRUtils_ginv_cpp", (DL_FUNC) &_SigBridgeRUtils_ginv_cpp, 2},
     {"_SigBridgeRUtils_matrix_summary_cpp", (DL_FUNC) &_SigBridgeRUtils_matrix_summary_cpp, 4},
     {"_SigBridgeRUtils_matrix_quantiles_cpp", (DL_FUNC) &_SigBridgeRUtils_matrix_quantiles_cpp, 3},
     {"_SigBridgeRUtils_normalize_quantiles_cpp", (DL_FUNC) &_SigBridgeRUtils_normalize_quantiles_cpp, 1},
+    {"_SigBridgeRUtils_unpack_assign_cpp", (DL_FUNC) &_SigBridgeRUtils_unpack_assign_cpp, 3},
     {NULL, NULL, 0}
 };
 

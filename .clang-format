@@ -8,4 +8,4 @@ PointerAlignment: Left
 BreakBeforeBraces: Attach
 AllowShortIfStatementsOnASingleLine: WithoutElse
 AllowShortFunctionsOnASingleLine: Inline
-SortIncludes: false
+SortIncludes: Never

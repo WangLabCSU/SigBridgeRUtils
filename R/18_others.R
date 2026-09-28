@@ -63,7 +63,7 @@ all_identical <- function(..., names = NULL) {
       for (j in (i + 1L):n) {
         is_identical <- identical(objs[[i]], objs[[j]])
         result[i, j] <- is_identical
-        result[j, i] <- is_identical # 对称矩阵
+        result[j, i] <- is_identical
       }
     }
   }

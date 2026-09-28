@@ -17,3 +17,7 @@ normalize_quantiles_cpp <- function(initialized_matrix) {
     .Call(`_SigBridgeRUtils_normalize_quantiles_cpp`, initialized_matrix)
 }
 
+unpack_assign_cpp <- function(lhs, rhs, env) {
+    invisible(.Call(`_SigBridgeRUtils_unpack_assign_cpp`, lhs, rhs, env))
+}
+
