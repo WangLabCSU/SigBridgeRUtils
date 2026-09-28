@@ -6,7 +6,7 @@
 
 [![Lifecycle:stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN-status](https://www.r-pkg.org/badges/version/SigBridgeRUtils)](https://CRAN.R-project.org/package=SigBridgeRUtils)
-[![Devel-Version](https://img.shields.io/badge/devel%20version-0.2.8-blue.svg)](https://github.com/WangLabCSU/SigBridgeRUtils)
+[![Devel-Version](https://img.shields.io/badge/devel%20version-0.2.7-blue.svg)](https://github.com/WangLabCSU/SigBridgeRUtils)
 [![R-CMD-check](https://github.com/WangLabCSU/SigBridgeRUtils/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/WangLabCSU/SigBridgeRUtils/actions/workflows/R-CMD-check.yaml)
 [![Code-size](https://img.shields.io/github/languages/code-size/WangLabCSU/SigBridgeRUtils.svg)](https://github.com/WangLabCSU/SigBridgeRUtils)
 <!-- badges: end -->
