@@ -18,6 +18,8 @@ GetFuncArgs(
 
 \item{name_only}{Logical. If \code{TRUE}, returns only argument names. If \code{FALSE}, returns the full argument list. Default is \code{FALSE}.}
 
+\item{func}{which function to seek}
+
 \item{call}{The call expression to extract arguments from. Default is \code{rlang::caller_call()}.}
 
 \item{dots_expand}{Logical. Whether to expand \code{...} arguments. Default is \code{TRUE}.}

@@ -25,8 +25,8 @@ detect_gpu <- function(verbose = TRUE) {
         ignore.stderr = TRUE
       )
       !is.null(out) &&
-        length(out) > 0 &&
-        !grepl("not found|command not found", out[1], ignore.case = TRUE)
+        length(out) > 0L &&
+        !grepl("not found|command not found", out[1L], ignore.case = TRUE)
     },
     error = function(e) FALSE
   )
@@ -46,8 +46,8 @@ detect_gpu <- function(verbose = TRUE) {
         ignore.stderr = TRUE
       )
       !is.null(out) &&
-        length(out) > 0 &&
-        !grepl("not found", out[1], ignore.case = TRUE)
+        length(out) > 0L &&
+        !grepl("not found", out[1L], ignore.case = TRUE)
     },
     error = function(e) FALSE
   )
@@ -67,7 +67,7 @@ detect_gpu <- function(verbose = TRUE) {
         system("system_profiler SPDisplaysDataType 2>&1", intern = TRUE),
         value = TRUE
       )) >
-        0,
+        0L,
       error = function(e) FALSE
     )
 
@@ -87,7 +87,7 @@ detect_gpu <- function(verbose = TRUE) {
           'wmic path win32_VideoController get name 2>&1',
           intern = TRUE
         )
-        length(out) > 1 && any(nzchar(trimws(out[-1])))
+        length(out) > 1L && any(nzchar(trimws(out[-1L])))
       },
       error = function(e) FALSE
     )

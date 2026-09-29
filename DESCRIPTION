@@ -7,12 +7,13 @@ Description: Provides fundamental function support for 'SigBridgeR' and its sing
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Depends: 
     R (>= 4.1.0)
 Suggests: 
+    DelayedArray,
     furrr,
     future,
+    ggplot2,
     MASS,
     Matrix,
     matrixStats,
@@ -21,14 +22,25 @@ Suggests:
     Rfast,
     SeuratObject,
     sparseMatrixStats,
-    testthat
+    testthat,
+    zeallot
 Imports: 
+    beachmat,
     chk,
     cli,
     data.table,
     processx,
     purrr,
+    Rcpp,
     reticulate,
     rlang
 Config/testthat/parallel: true
 Config/testthat/edition: 3
+URL: https://github.com/WangLabCSU/SigBridgeRUtils
+BugReports: https://github.com/WangLabCSU/SigBridgeRUtils/issues
+LinkingTo: 
+    Rcpp,
+    RcppArmadillo,
+    assorthead,
+    beachmat
+Config/roxygen2/version: 8.1.0
