@@ -13,6 +13,6 @@
 \.codebuddy$
 \.clangd$
 \.clang-format$
-\AGENTS\.md$
+^AGENTS\.md$
 setting\.json$
 \.posit$

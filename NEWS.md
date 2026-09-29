@@ -1,4 +1,4 @@
-# SigBridgeRUtils 0.2.8
+# SigBridgeRUtils 0.2.7
 
 * Added C++-backed unpacking assignment with `%<-%`, including named extraction,
   recursive targets, positional collectors, and ignored elements.
